@@ -1,0 +1,40 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor Requester
+
+participant System
+database redis
+database database
+participant Kakao_Api
+
+title Pharmacy Recommendation System
+footer Page %page% of %lastpage%
+
+skinparam responseMessageBelowArrow true
+
+Requester -> System: 주소를 입력하여 요청
+
+|||
+|||
+group 주소 정보가 유효한 경우
+    System -> Kakao_Api: 주소 정보를 위도, 경도 반환 요청
+    Kakao_Api --> System: 주소를 위도, 경도 변환
+|||
+    System -> redis: 약국 현황 데이터 Redis 조회
+    else #Pink Failure
+        System -> database: Redis 장애인 경우 DB 조회
+    else
+|||
+    System -> System: 가장 가까운 약국 3개 추출
+|||
+    System -> database: 길안내 URL 저장(위도, 경도, 출발지, 목적지)
+|||
+    System -> Requester: 추천 약국 길안내 제공
+end
+|||
+|||
+
+@enduml

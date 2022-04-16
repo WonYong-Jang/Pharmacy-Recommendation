@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor Requester
+
+participant System
+database database
+
+title Direction Process(Shorten url)
+footer Page %page% of %lastpage%
+|||
+skinparam responseMessageBelowArrow true
+
+Requester -> System: 길안내 요청
+|||
+note left: http://{ip}/dir/{encodedId}
+
+System -> database: 테이블 조회(출발지, 도착지 정보)
+database --> System: response
+|||
+
+System -> Requester: 카카오 길안내 url redirect
+
+@enduml
