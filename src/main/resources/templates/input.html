@@ -10,8 +10,7 @@
         <h2>Pharmacy Recommendation</h2>
     </div>
 
-    <form th:action th:object="${form}" method="post">
-
+    <form th:action th:object="${inputForm}" method="post">
         <label for="name">주소</label>
         <input type="text" id="name" th:field="*{address}">
         <button type="submit">전송</button>

@@ -5,6 +5,22 @@
     <title>Title</title>
 </head>
 <body>
-successsss
+<div>
+    <h2>Pharmacy Recommendation Results</h2>
+</div>
+
+    <table>
+        <tr>
+            <th>약국명</th>
+            <th>약국 주소</th>
+            <th>길안내 링크</th>
+        </tr>
+        <tr th:each="outputForm: ${outputFormList}">
+            <td th:text="${outputForm.pharmacyName}"></td>
+            <td th:text="${outputForm.pharmacyAddress}"></td>
+            <td th:text="${outputForm.directionUrl}"></td>
+        </tr>
+    </table>
+
 </body>
 </html>

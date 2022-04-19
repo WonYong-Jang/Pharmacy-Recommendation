@@ -1,4 +1,4 @@
-package com.example.demo.direction;
+package com.example.demo.direction.dto;
 
 import lombok.Getter;
 import lombok.Setter;

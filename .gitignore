@@ -39,3 +39,4 @@ out/
 ### Gradle
 .gradle
 /build/
+.gradletasknamecache

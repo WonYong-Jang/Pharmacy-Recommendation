@@ -9,8 +9,9 @@ participant System
 database database
 
 title Direction Process(Shorten url)
-footer Page %page% of %lastpage%
+
 |||
+
 skinparam responseMessageBelowArrow true
 
 Requester -> System: 길안내 요청
@@ -22,5 +23,7 @@ database --> System: response
 |||
 
 System -> Requester: 카카오 길안내 url redirect
+
+footer Page %page% of %lastpage%
 
 @enduml
