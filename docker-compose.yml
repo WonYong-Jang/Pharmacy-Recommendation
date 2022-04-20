@@ -1,0 +1,13 @@
+version: "3"
+services:
+  redis-server:
+    image: "redis"
+  pharmacy-recommendation:
+    build: .
+    environment:
+      - DB_URL=${DB_URL}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - KAKAO_REST_API_KEY=${KAKAO_REST_API_KEY}
+    ports:
+      - "80:8080"

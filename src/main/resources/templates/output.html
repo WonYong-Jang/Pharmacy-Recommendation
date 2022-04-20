@@ -9,7 +9,7 @@
     <h2>Pharmacy Recommendation Results</h2>
 </div>
 
-    <table>
+    <table border="1">
         <tr>
             <th>약국명</th>
             <th>약국 주소</th>
@@ -18,7 +18,11 @@
         <tr th:each="outputForm: ${outputFormList}">
             <td th:text="${outputForm.pharmacyName}"></td>
             <td th:text="${outputForm.pharmacyAddress}"></td>
-            <td th:text="${outputForm.directionUrl}"></td>
+            <td>
+                <a th:href="@{${outputForm.directionUrl}}">
+                    <span th:text="${outputForm.directionUrl}"></span>
+                </a>
+            </td>
         </tr>
     </table>
 

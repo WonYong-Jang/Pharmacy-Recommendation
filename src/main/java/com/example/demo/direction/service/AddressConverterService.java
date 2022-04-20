@@ -3,10 +3,10 @@ package com.example.demo.direction.service;
 import com.example.demo.direction.dto.DocumentDto;
 import com.example.demo.direction.dto.KakaoApiResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -20,7 +20,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AddressConverterService {
 
-    private String kakaoRestApiKey = "0a4d664f9907b3da6d10f6ea19bcfec7";
+    @Value("${kakao.rest.api.key}")
+    private String kakaoRestApiKey;
+
     private static final String KAKAO_LOCAL_SEARCH_ADDRESS_URL = "https://dapi.kakao.com/v2/local/search/address.json";
 
     public Optional<DocumentDto> convertAddressToGeospatialData(String address) {

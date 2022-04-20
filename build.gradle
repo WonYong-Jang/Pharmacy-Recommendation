@@ -29,6 +29,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'com.opencsv:opencsv:4.3'
     implementation 'io.seruco.encoding:base62:0.1.3'
 
