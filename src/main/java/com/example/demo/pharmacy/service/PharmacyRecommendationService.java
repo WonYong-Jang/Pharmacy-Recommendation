@@ -27,6 +27,8 @@ public class PharmacyRecommendationService {
     private final PharmacyService pharmacyService;
     private final DirectionService directionService;
 
+    private String baseUrl = "http://localhost/dir/";
+
     public List<OutputDto> recommendPharmacyList(String address) {
 
         DocumentDto documentDto = addressConverterService.convertAddressToGeospatialData(address)
@@ -50,7 +52,7 @@ public class PharmacyRecommendationService {
                         OutputDto.builder()
                                 .pharmacyName(direction.getTargetPharmacyName())
                                 .pharmacyAddress(direction.getTargetAddress())
-                                .directionUrl("http://localhost:8080/dir/" + directionService.encodeDirectionId(direction.getId()))
+                                .directionUrl(baseUrl + directionService.encodeDirectionId(direction.getId()))
                                 .build())
                 .collect(Collectors.toList());
     }

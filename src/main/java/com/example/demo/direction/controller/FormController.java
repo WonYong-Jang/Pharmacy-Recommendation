@@ -6,9 +6,8 @@ import com.example.demo.pharmacy.service.PharmacyRecommendationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,18 +18,18 @@ public class FormController {
     private final PharmacyRecommendationService pharmacyRecommendationService;
 
     @GetMapping("/")
-    public String getDirection(Model model) {
-        model.addAttribute("inputForm", new InputDto());
-        return "input";
+    public String main() {
+        return "main";
     }
 
-    @PostMapping("/")
-    public String postDirection(@ModelAttribute("input") InputDto inputDto, Model model) {
+    @PostMapping("/search")
+    public ModelAndView postDirection(@ModelAttribute InputDto inputDto) {
 
-        List<OutputDto> outputList =
-                pharmacyRecommendationService.recommendPharmacyList(inputDto.getAddress());
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("output");
+        modelAndView.addObject("outputFormList",
+                pharmacyRecommendationService.recommendPharmacyList(inputDto.getAddress()));
 
-        model.addAttribute("outputFormList", outputList);
-        return "output";
+        return modelAndView;
     }
 }

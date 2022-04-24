@@ -41,3 +41,6 @@ out/
 .gradle
 /build/
 .gradletasknamecache
+
+### mac
+*.DS_Store

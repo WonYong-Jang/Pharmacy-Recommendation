@@ -2,12 +2,21 @@ version: "3"
 services:
   redis-server:
     image: "redis"
+  database-mariadb:
+    container_name: database-mariadb
+    image: mariadb
+    environment:
+      - MARIADB_DATABASE=pharmacyRecommendation
+      - MARIADB_ROOT_PASSWORD=1234
+    command: [ '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
+    ports:
+      - "3306:3306"
   pharmacy-recommendation:
     build: .
     environment:
-      - DB_URL=${DB_URL}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
       - KAKAO_REST_API_KEY=${KAKAO_REST_API_KEY}
     ports:
       - "80:8080"
