@@ -2,10 +2,22 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Pharmacy Recommendation System</title>
 
     <!--부트스트랩 css 추가-->
     <link rel="stylesheet" href="/css/lib/bootstrap.min.css">
+
+    <style>
+        .grid-image{
+            display: flex;
+            justify-content: center;
+        }
+        img {
+            margin: 20px 0 20px;
+            width: 50%;
+            height: 450px;
+        }
+    </style>
 </head>
 <body>
     <div>
@@ -26,7 +38,11 @@
                         </div>
                     </form>
                 </div>
-
+                <div class="grid-image">
+                    <img src="/images/map.png" alt="map" class="img-responsive img-rounded">
+                    <img src="/images/road.png" alt="road" class="img-responsive img-rounded">
+                </div>
+                {{> footer}}
             </div>
         </div>
     </div>

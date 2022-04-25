@@ -2,14 +2,16 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Pharmacy Recommendation System</title>
+    <!--부트스트랩 css 추가-->
+    <link rel="stylesheet" href="/css/lib/bootstrap.min.css">
 </head>
 <body>
 <div>
     <h2>Pharmacy Recommendation Results</h2>
 </div>
 
-    <table border="1">
+    <table class="table table-hover">
         <tr>
             <th>약국명</th>
             <th>약국 주소</th>
@@ -23,6 +25,9 @@
         </tr>
         {{/each}}
     </table>
+
+    <script src="/js/lib/jquery.min.js"></script>
+    <script src="/js/lib/bootstrap.min.js"></script>
 
 </body>
 </html>

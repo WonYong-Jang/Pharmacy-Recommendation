@@ -1,18 +1,30 @@
-version: "3"
-services:
-  redis-server:
-    image: "redis"
+version: "3"                           # 파일 규격 버전
+services:                              # 이 항목 밑에 실행하려는 컨테이너 들을 정의
+  redis-server:                        # 서비스명
+    container_name: redis-server       # 컨테이너 명
+    build:
+      dockerfile: Dockerfile
+      context: ./redis
+    image: zcx5674/redis-server
   database-mariadb:
     container_name: database-mariadb
-    image: mariadb
+    build:
+      dockerfile: Dockerfile
+      context: ./database
+    image: zcx5674/database-mariadb
     environment:
       - MARIADB_DATABASE=pharmacyRecommendation
       - MARIADB_ROOT_PASSWORD=1234
+      - TZ=Asia/Seoul    # 컨테이너 내의 시스템 타임존을 우리나라에 맞게 설정합니다.
+    volumes:
+      - ./database/config:/etc/mysql/conf.d
     command: [ '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
     ports:
-      - "3306:3306"
+      - "3306:3306"      # 접근 포트 설정 (컨테이너 외부:컨테이너 내부)
   pharmacy-recommendation:
+    container_name: pharmacy-recommendation
     build: .
+    image: zcx5674/pharmacy-recommendation
     environment:
       - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
       - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}

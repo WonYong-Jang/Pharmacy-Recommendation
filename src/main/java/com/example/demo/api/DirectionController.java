@@ -3,12 +3,17 @@ package com.example.demo.api;
 import com.example.demo.direction.entity.Direction;
 import com.example.demo.direction.service.DirectionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
+
 @Controller
+@Slf4j
 @RequiredArgsConstructor
 public class DirectionController {
 
@@ -19,16 +24,12 @@ public class DirectionController {
 
         Direction resultDirection = directionService.findById(encodedId);
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://map.naver.com/index.nhn");
-        builder.queryParam("slat", resultDirection.getInputLatitude())
-                .queryParam("slng", resultDirection.getInputLongitude())
-                .queryParam("stext", resultDirection.getInputAddress())
-                .queryParam("elat", resultDirection.getTargetLatitude())
-                .queryParam("elng", resultDirection.getTargetLongitude())
-                .queryParam("etext", resultDirection.getTargetAddress())
-                .queryParam("menu","route")
-                .queryParam("pathType","3");
-        return String.format("redirect:%s", builder.toUriString());
+        String params = String.join(",", resultDirection.getTargetAddress(),
+                String.valueOf(resultDirection.getTargetLatitude()), String.valueOf(resultDirection.getTargetLongitude()));
+        String result = UriComponentsBuilder.fromHttpUrl("https://map.kakao.com/link/map/" + params)
+                .toUriString();
+
+        return "redirect:"+result;
     }
 
 }

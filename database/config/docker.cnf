@@ -1,0 +1,4 @@
+# docker.cnf
+[mysqld]
+skip-host-cache
+skip-name-resolve

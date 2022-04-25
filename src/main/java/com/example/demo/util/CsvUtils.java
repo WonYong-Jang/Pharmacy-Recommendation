@@ -15,7 +15,7 @@ public class CsvUtils {
 
     public static List<PharmacyDto> convertToPharmacyDtoList() {
 
-        String file = "/Users/jang-won-yong/lecture/pharmacy.csv";
+        String file = "/pharmacy.csv";
         List<List<String>> csvList = new ArrayList<>();
         try (CSVReader csvReader = new CSVReader(new FileReader(file))) {
             String[] values = null;
@@ -29,9 +29,11 @@ public class CsvUtils {
         return IntStream.range(1, csvList.size()).mapToObj(index -> {
             List<String> rowList = csvList.get(index);
 
+            String[] split = rowList.get(1).split(",");
+
             return PharmacyDto.builder()
                     .pharmacyName(rowList.get(0))
-                    .pharmacyAddress(rowList.get(1))
+                    .pharmacyAddress(split[0])
                     .latitude(Double.parseDouble(rowList.get(4)))
                     .longitude(Double.parseDouble(rowList.get(5)))
                     .build();
