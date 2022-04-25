@@ -1,0 +1,33 @@
+sudo: required
+#   specify docker as a dependecy
+
+language: generic
+
+services:
+  - docker
+
+#    production dockerfile does not allow us to run tests!, so run as Dockerfile.dev
+before_install:
+  - echo "start before install"
+#  - docker build -t tlonist/react-test -f ./client/Dockerfile.dev ./client
+
+#   makes test code exist by adding -- --coverage
+script:
+  - echo "start script"
+#  - docker run tlonist/react-test npm test -- --coverage
+
+#   build prod versions of docker
+after_success:
+  - docker build -t zcx5674/pharmacy-recommendation-app .
+  - docker build -t zcx5674/pharmacy-recommendation-database ./database
+  - docker build -t zcx5674/pharmacy-recommendation-redis ./redis
+
+  #   login to Docker hub
+  - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_ID" --password-stdin
+  #   push all to docker hub, by using encrypted private information entered in Travis
+  - docker push zcx5674/pharmacy-recommendation-app
+  - docker push zcx5674/pharmacy-recommendation-database
+  - docker push zcx5674/pharmacy-recommendation-redis
+
+
+
