@@ -11,7 +11,7 @@
 
 <img width="615" alt="스크린샷 2022-04-19 오후 12 58 50" src="https://user-images.githubusercontent.com/26623547/163917670-33f1c8bb-d23f-4552-958d-6096ecb75ebb.png">   
 
-## Direction Shorten Url
+## Direction Shorten Url Process
 
 <img width="615" alt="스크린샷 2022-04-19 오후 12 59 03" src="https://user-images.githubusercontent.com/26623547/163917679-e79dd3ef-17fc-4f48-b77c-64cc4715c1f3.png">  
 
