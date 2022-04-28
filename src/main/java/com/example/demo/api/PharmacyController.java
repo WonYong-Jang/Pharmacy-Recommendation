@@ -1,11 +1,11 @@
 package com.example.demo.api;
 
+import com.example.demo.pharmacy.cache.PharmacyRedisTemplateService;
+import com.example.demo.pharmacy.dto.PharmacyDto;
 import com.example.demo.pharmacy.entity.Pharmacy;
 import com.example.demo.pharmacy.service.PharmacyService;
 import com.example.demo.util.CsvUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,31 +17,43 @@ import java.util.stream.Collectors;
 public class PharmacyController {
 
     private final PharmacyService pharmacyService;
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final PharmacyRedisTemplateService pharmacyRedisTemplateService;
 
-    @GetMapping("/csv/pharmacy/save")
+    @GetMapping("/csv/pharmacy/database/save")
     public String saveCsvToDatabase() {
 
-        List<Pharmacy> pharmacyList = CsvUtils.convertToPharmacyDtoList()
+        List<Pharmacy> pharmacyList = loadPharmacyList();
+        pharmacyService.saveAll(pharmacyList);
+
+        return "success";
+    }
+
+    @GetMapping("/csv/pharmacy/redis/save")
+    public String saveCsvToRedis() {
+        List<PharmacyDto> pharmacyDtoList = loadPharmacyList()
+                .stream().map(pharmacy -> PharmacyDto.builder()
+                        .id(pharmacy.getId())
+                        .pharmacyName(pharmacy.getPharmacyName())
+                        .pharmacyAddress(pharmacy.getPharmacyAddress())
+                        .latitude(pharmacy.getLatitude())
+                        .longitude(pharmacy.getLongitude())
+                        .build()).collect(Collectors.toList());
+
+        pharmacyDtoList.forEach(pharmacyRedisTemplateService::save);
+
+        return "success";
+    }
+
+    private List<Pharmacy> loadPharmacyList() {
+        return CsvUtils.convertToPharmacyDtoList()
                 .stream().map(pharmacyDto ->
                         Pharmacy.builder()
+                                .id(pharmacyDto.getId())
                                 .pharmacyName(pharmacyDto.getPharmacyName())
                                 .pharmacyAddress(pharmacyDto.getPharmacyAddress())
                                 .latitude(pharmacyDto.getLatitude())
                                 .longitude(pharmacyDto.getLongitude())
                                 .build())
                 .collect(Collectors.toList());
-
-        pharmacyService.saveAll(pharmacyList);
-
-        return "success";
-    }
-
-    @GetMapping("/redis")
-    public void test() {
-        ValueOperations<String, Object> operations = redisTemplate.opsForValue();
-        operations.set("test", "test");
-        String redis = (String)operations.get("test");
-        System.out.println(redis+"/////////");
     }
 }

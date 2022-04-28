@@ -8,9 +8,9 @@ import lombok.Getter;
 @Builder
 public class PharmacyDto {
 
+    private Long id;
     private String pharmacyName;
     private String pharmacyAddress;
     private double latitude;
     private double longitude;
-
 }
