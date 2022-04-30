@@ -30,7 +30,8 @@ public class PharmacyController {
 
     @GetMapping("/csv/pharmacy/redis/save")
     public String saveCsvToRedis() {
-        List<PharmacyDto> pharmacyDtoList = loadPharmacyList()
+
+        List<PharmacyDto> pharmacyDtoList = pharmacyService.findAll()
                 .stream().map(pharmacy -> PharmacyDto.builder()
                         .id(pharmacy.getId())
                         .pharmacyName(pharmacy.getPharmacyName())

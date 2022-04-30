@@ -4,9 +4,11 @@ import com.example.demo.pharmacy.entity.Pharmacy;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 @Getter
 @Builder
-public class PharmacyDto {
+public class PharmacyDto implements Serializable { // todo Serializable DTO?
 
     private Long id;
     private String pharmacyName;

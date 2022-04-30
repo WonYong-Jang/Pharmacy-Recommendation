@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -23,8 +24,8 @@ public class PharmacyRedisTemplateService {
     }
 
     public void save(PharmacyDto pharmacyDto) {
-        if(Objects.isNull(pharmacyDto)) {
-            log.error("PharmacyDto must not be null");
+        if(Objects.isNull(pharmacyDto) || Objects.isNull(pharmacyDto.getId())) {
+            log.error("Required Values must not be null");
             return;
         }
 
@@ -33,5 +34,10 @@ public class PharmacyRedisTemplateService {
         } catch (Exception e) {
             log.error("PharmacyDto save error ", e);
         }
+    }
+
+    public List<PharmacyDto> findAll() {
+
+        return (List<PharmacyDto>) hashOperations.entries(CACHE_KEY);
     }
 }
