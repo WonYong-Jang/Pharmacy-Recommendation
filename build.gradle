@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.6.6'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'groovy'
 }
 
 group = 'com.example'
@@ -33,8 +34,14 @@ dependencies {
     implementation 'com.opencsv:opencsv:4.3'
     implementation 'io.seruco.encoding:base62:0.1.3'
 
+
+    testImplementation('org.spockframework:spock-core:2.1-groovy-3.0')
+    testImplementation('org.spockframework:spock-spring:2.1-groovy-3.0')
+
+    // 런타임에 클래스 기반 mock을 만들기 위해서 필요
+    testImplementation('net.bytebuddy:byte-buddy:1.9.3')
 }
 
-tasks.named('test') {
+'test' {
     useJUnitPlatform()
 }
