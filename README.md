@@ -17,7 +17,10 @@
     - ex) 경기도 성남시 분당구 분당동 66
   - 입력 받은 주소를 위도, 경도로 변환하여 기존 정류장 데이터와 비교 및 가까운 정류장을 추출한다.
   - 추출한 정류장 데이터는 출발지와 도착지를 안내하는 길안내 URL로 제공한다.
-    - ex) https://map.kakao.com/?sX=500000&sY=1084098&sName=startName&eX=523953&eY=1084098&eName=destinationName
+    - ex) 
+    https://map.kakao.com/link/to/카카오판교오피스,37.402056,127.108212    
+    https://map.kakao.com/link/roadview/37.402056,127.108212     
+
   - 길안내 URL은 고객에게 제공되기 때문에 가독성을 위해 shorten url로 제공한다.
   - shorten url에 사용되는 key값은 인코딩하여 제공한다.
     - ex) http://localhost:8080/dir/nqxtX
@@ -50,7 +53,7 @@
 - AWS EC2
 - Redis
 - MariaDB
-- Travis CI ( Optional )
+- Spock   
 
 ## Result   
 
