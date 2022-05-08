@@ -5,10 +5,22 @@
     <title>Pharmacy Recommendation System</title>
     <!--부트스트랩 css 추가-->
     <link rel="stylesheet" href="/css/lib/bootstrap.min.css">
+
+    <style>
+        .grid-image, .h2-title{
+            display: flex;
+            justify-content: center;
+        }
+        img {
+            margin: 0 0 5px;
+            width: 70%;
+            height: 550px;
+        }
+    </style>
 </head>
 <body>
 <div>
-    <h2>Pharmacy Recommendation Results</h2>
+    <h2 class="h2-title">Pharmacy Recommendation Results</h2>
 </div>
 
     <table class="table table-hover">
@@ -25,7 +37,9 @@
         </tr>
         {{/each}}
     </table>
-
+    <div class="grid-image">
+        <img src="/images/kakao.png" alt="kakao" class="img-responsive img-rounded">
+    </div>
     <script src="/js/lib/jquery.min.js"></script>
     <script src="/js/lib/bootstrap.min.js"></script>
 
