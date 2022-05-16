@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,10 +17,10 @@ public class PharmacyRedisTemplateService {
 
     private static final String CACHE_KEY = "PHARMACY";
 
-    private final HashOperations hashOperations;
+    private final HashOperations<String, Long, PharmacyDto> hashOperations;
 
     @Autowired
-    public PharmacyRedisTemplateService(RedisTemplate redisTemplate) {
+    public PharmacyRedisTemplateService(RedisTemplate<String, Object> redisTemplate) {
         this.hashOperations = redisTemplate.opsForHash();
     }
 
@@ -37,7 +38,6 @@ public class PharmacyRedisTemplateService {
     }
 
     public List<PharmacyDto> findAll() {
-
-        return (List<PharmacyDto>) hashOperations.entries(CACHE_KEY);
+        return new ArrayList<>(hashOperations.entries(CACHE_KEY).values());
     }
 }
