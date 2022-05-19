@@ -1,8 +1,8 @@
 package com.example.demo.pharmacy.cache
 
-import com.example.demo.pharmacy.dto.PharmacyDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.redis.core.HashOperations
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.core.ValueOperations
 import org.springframework.test.context.ActiveProfiles
@@ -10,15 +10,14 @@ import org.testcontainers.containers.GenericContainer
 import org.testcontainers.spock.Testcontainers
 import spock.lang.Shared
 import spock.lang.Specification
-import spock.lang.Unroll
 
 @Testcontainers
 @ActiveProfiles("test")
 @SpringBootTest
-class PharmacyRedisTemplateServiceTest extends Specification {
+class RedisTemplateTest extends Specification {
 
     @Autowired
-    PharmacyRedisTemplateService pharmacyRedisTemplateService;
+    RedisTemplate redisTemplate;
 
     @Shared
     GenericContainer redis = new GenericContainer<>("redis:6-alpine")
@@ -33,32 +32,33 @@ class PharmacyRedisTemplateServiceTest extends Specification {
         println "컨테이너 로그 확인 : " + redis.getLogs()
     }
 
-
-
-    def "save"() {
+    def "RedisTemplate String operations"() {
         given:
-        String pharmacyName = "name"
-        String pharmacyAddress = "address"
-        PharmacyDto dto =
-                PharmacyDto.builder()
-                        .id(1L)
-                        .pharmacyName(pharmacyName)
-                        .pharmacyAddress(pharmacyAddress)
-                        .build()
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue()
+        String key = "stringKey"
+        String value = "hello"
 
         when:
-        pharmacyRedisTemplateService.save(dto)
-        List<PharmacyDto> result = pharmacyRedisTemplateService.findAll()
+        valueOperations.set(key, value)
 
         then:
-        result.size() == 1
-        result.get(0).id == 1L
-        result.get(0).pharmacyName == pharmacyName
-        result.get(0).pharmacyAddress == pharmacyAddress
+        String resultValue = valueOperations.get(key)
+        resultValue == "hello"
     }
 
-//    @Unroll
-//    def "save if required value is null"() {
-//        // where
+//    def "RedisTemplate Hash operations"() {
+//
+//
 //    }
+
+    def "Hello의 길이는 정말 5글자인가?"() {
+        given:
+        def input = "hello"
+
+        when:
+        def result = input.length()
+
+        then:
+        result == 5
+    }
 }
