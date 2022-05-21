@@ -2,7 +2,6 @@ package com.example.demo.pharmacy.cache
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.data.redis.core.HashOperations
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.core.ValueOperations
 import org.springframework.test.context.ActiveProfiles
@@ -19,6 +18,7 @@ class RedisTemplateTest extends Specification {
     @Autowired
     RedisTemplate redisTemplate;
 
+    // @Shared starts container once before all test methods
     @Shared
     GenericContainer redis = new GenericContainer<>("redis:6-alpine")
             .withExposedPorts(6379)
@@ -44,21 +44,5 @@ class RedisTemplateTest extends Specification {
         then:
         String resultValue = valueOperations.get(key)
         resultValue == "hello"
-    }
-
-//    def "RedisTemplate Hash operations"() {
-//
-//
-//    }
-
-    def "Hello의 길이는 정말 5글자인가?"() {
-        given:
-        def input = "hello"
-
-        when:
-        def result = input.length()
-
-        then:
-        result == 5
     }
 }
