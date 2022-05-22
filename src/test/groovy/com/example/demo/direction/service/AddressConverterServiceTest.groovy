@@ -1,14 +1,9 @@
 package com.example.demo.direction.service
 
-
+import com.example.demo.AbstractIntegrationContainerBaseTest
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ActiveProfiles
-import spock.lang.Specification
 
-@ActiveProfiles("test")
-@SpringBootTest
-class AddressConverterServiceTest extends Specification {
+class AddressConverterServiceTest extends AbstractIntegrationContainerBaseTest {
 
     @Autowired
     AddressConverterService addressConverterService
@@ -28,4 +23,5 @@ class AddressConverterServiceTest extends Specification {
         "광진구 구의동 251-455555"                 | false
         ""                                      | false
     }
+
 }
