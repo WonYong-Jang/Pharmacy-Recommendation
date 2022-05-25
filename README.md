@@ -52,8 +52,8 @@
 
 ## Tech Stack   
 
-- JDK 8
-- Spring Boot
+- JDK 11
+- Spring Boot 2.6.7
 - Spring Data JPA
 - Gradle
 - Handlebars
