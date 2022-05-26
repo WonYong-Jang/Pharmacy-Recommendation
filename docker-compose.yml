@@ -1,4 +1,4 @@
-version: "3"                                            # 파일 규격 버전
+version: "3.9"                                            # 파일 규격 버전
 services:                                               # 이 항목 밑에 실행하려는 컨테이너 들을 정의
   pharmacy-recommendation-redis:                                         # 서비스명
     container_name: pharmacy-recommendation-redis       # 컨테이너 명
@@ -24,6 +24,9 @@ services:                                               # 이 항목 밑에 실�
   pharmacy-recommendation-app:
     container_name: pharmacy-recommendation-app
     build: .
+    depends_on:          # DB, REDIS 컨테이너가 실행된 다음 WEB을 실행시킨다.
+      - pharmacy-recommendation-redis
+      - pharmacy-recommendation-database
     image: zcx5674/pharmacy-recommendation-app
     environment:
       - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
