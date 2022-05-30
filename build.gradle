@@ -43,6 +43,10 @@ dependencies {
 
     // 런타임에 클래스 기반 mock을 만들기 위해서 필요
     testImplementation('net.bytebuddy:byte-buddy:1.12.10')
+
+    // spring retry
+    implementation 'org.springframework.retry:spring-retry'
+
 }
 
 'test' {

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -22,6 +23,8 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class AddressConverterService {
 
+    private final RetryTemplate retryTemplate;
+
     @Value("${kakao.rest.api.key}")
     private String kakaoRestApiKey;
 
@@ -36,7 +39,8 @@ public class AddressConverterService {
         Matcher matcher = ADDRESS_PATTERN.matcher(address);
         if(!matcher.find()) return Optional.empty();
 
-        KakaoApiResponseDto kakaoApiResponseDto = requestKakaoApi(address);
+        //KakaoApiResponseDto kakaoApiResponseDto = requestKakaoApi(address);
+        KakaoApiResponseDto kakaoApiResponseDto = retryTemplate.execute(context -> requestKakaoApi(address));
 
         List<DocumentDto> documentList = Optional.ofNullable(kakaoApiResponseDto)
                 .map(KakaoApiResponseDto::getDocumentList)
