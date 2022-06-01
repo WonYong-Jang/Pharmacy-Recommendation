@@ -3,7 +3,7 @@ package com.example.demo.direction.service
 import com.example.demo.AbstractIntegrationContainerBaseTest
 import org.springframework.beans.factory.annotation.Autowired
 
-class AddressConverterServiceTest extends AbstractIntegrationContainerBaseTest {
+class AddressConverterServiceIntegrationTest extends AbstractIntegrationContainerBaseTest {
 
     @Autowired
     AddressConverterService addressConverterService
@@ -23,5 +23,4 @@ class AddressConverterServiceTest extends AbstractIntegrationContainerBaseTest {
         "광진구 구의동 251-455555"                 | false
         ""                                      | false
     }
-
 }

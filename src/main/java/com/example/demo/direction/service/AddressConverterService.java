@@ -3,10 +3,14 @@ package com.example.demo.direction.service;
 import com.example.demo.direction.dto.DocumentDto;
 import com.example.demo.direction.dto.KakaoApiResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -19,6 +23,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AddressConverterService {
@@ -29,22 +34,23 @@ public class AddressConverterService {
     private String kakaoRestApiKey;
 
     private static final String KAKAO_LOCAL_SEARCH_ADDRESS_URL = "https://dapi.kakao.com/v2/local/search/address.json";
+    private static final Pattern ADDRESS_PATTERN = Pattern.compile("(([가-힣]+(d|d(,|.)d|)+(읍|면|동|가|리))(^구|)((d(~|-)d|d)(가|리|)|))([ ](산(d(~|-)d|d))|)|\n" + "(([가-힣]|(d(~|-)d)|d)+(로|길))");
 
-    private static final Pattern ADDRESS_PATTERN = Pattern.compile("(([가-힣]+(d|d(,|.)d|)+(읍|면|동|가|리))(^구|)((d(~|-)d|d)(가|리|)|))([ ](산(d(~|-)d|d))|)|\n" +
-            "(([가-힣]|(d(~|-)d)|d)+(로|길))");
-
+    @Retryable(
+            value = {RuntimeException.class},
+            maxAttempts = 2,
+            backoff = @Backoff(delay = 3000)
+    )
     public Optional<DocumentDto> convertAddressToGeospatialData(String address) {
 
         // address validation check
         Matcher matcher = ADDRESS_PATTERN.matcher(address);
-        if(!matcher.find()) return Optional.empty();
+        if (!matcher.find()) return Optional.empty();
 
-        //KakaoApiResponseDto kakaoApiResponseDto = requestKakaoApi(address);
-        KakaoApiResponseDto kakaoApiResponseDto = retryTemplate.execute(context -> requestKakaoApi(address));
+        KakaoApiResponseDto kakaoApiResponseDto = requestKakaoApi(address);
+        //KakaoApiResponseDto kakaoApiResponseDto = retryTemplate.execute(context -> requestKakaoApi(address));
 
-        List<DocumentDto> documentList = Optional.ofNullable(kakaoApiResponseDto)
-                .map(KakaoApiResponseDto::getDocumentList)
-                .orElse(Collections.emptyList());
+        List<DocumentDto> documentList = Optional.ofNullable(kakaoApiResponseDto).map(KakaoApiResponseDto::getDocumentList).orElse(Collections.emptyList());
 
         return documentList.stream().findFirst();
     }
@@ -60,10 +66,16 @@ public class AddressConverterService {
         headers.set("Authorization", "KakaoAK " + kakaoRestApiKey);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
+        log.info("AddressConverterService requestKakaoApi. address: {}, uri: {}", address, uri);
 
         RestTemplate restTemplate = new RestTemplate();
-        KakaoApiResponseDto kakaoApiResponseDto = restTemplate.exchange(uri, HttpMethod.GET, entity, KakaoApiResponseDto.class)
-                .getBody();
+        KakaoApiResponseDto kakaoApiResponseDto = restTemplate.exchange(uri, HttpMethod.GET, entity, KakaoApiResponseDto.class).getBody();
         return kakaoApiResponseDto;
+    }
+
+    @Recover
+    public Optional<DocumentDto> recover(RuntimeException e, String address) {
+        log.error("All the retries failed. address: {}, error : {}", address, e);
+        return Optional.empty();
     }
 }
