@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,12 @@ public class PharmacyController {
     private final PharmacyService pharmacyService;
     private final PharmacyRedisTemplateService pharmacyRedisTemplateService;
 
-    @GetMapping("/csv/pharmacy/database/save")
+    @PostConstruct
+    public void init() {
+        saveCsvToDatabase();
+        saveCsvToRedis();
+    }
+
     public String saveCsvToDatabase() {
 
         List<Pharmacy> pharmacyList = loadPharmacyList();
@@ -28,7 +34,6 @@ public class PharmacyController {
         return "success";
     }
 
-    @GetMapping("/csv/pharmacy/redis/save")
     public String saveCsvToRedis() {
 
         List<PharmacyDto> pharmacyDtoList = pharmacyService.findAll()
