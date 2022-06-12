@@ -4,3 +4,13 @@ spring:
     url: jdbc:tc:mariadb:10:///pharmacyRecommendation
     username: root
     password: 1234
+
+pharmacy:
+  recommendation:
+    base:
+      url: http://localhost/dir/
+
+kakao:
+  rest:
+    api:
+      key: ${KAKAO_REST_API_KEY}

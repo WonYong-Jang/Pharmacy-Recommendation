@@ -9,6 +9,7 @@ import com.example.demo.pharmacy.entity.Pharmacy;
 import com.example.demo.util.Pair;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -27,7 +28,8 @@ public class PharmacyRecommendationService {
     private final PharmacyService pharmacyService;
     private final DirectionService directionService;
 
-    private String baseUrl = "http://localhost/dir/";
+    @Value("${pharmacy.recommendation.base.url}")
+    private String baseUrl;
 
     public List<OutputDto> recommendPharmacyList(String address) {
 

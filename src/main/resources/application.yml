@@ -1,7 +1,9 @@
 spring:
+  profiles:
+    group:
+      "local": "local"
+      "prod": "prod"
   jpa:
     hibernate:
       ddl-auto: create
     show-sql: true
-  profiles:
-    include: private
