@@ -33,6 +33,7 @@ public class DirectionService {
         return directionRepository.findById(decodedId).orElse(null);
     }
 
+
     public String encodeDirectionId(Long directionId) {
         return new String(base62Instance.encode(String.valueOf(directionId).getBytes()));
     }
