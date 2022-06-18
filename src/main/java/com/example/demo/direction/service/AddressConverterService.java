@@ -34,7 +34,6 @@ public class AddressConverterService {
     private String kakaoRestApiKey;
 
     private static final String KAKAO_LOCAL_SEARCH_ADDRESS_URL = "https://dapi.kakao.com/v2/local/search/address.json";
-    private static final Pattern ADDRESS_PATTERN = Pattern.compile("(([가-힣]+(d|d(,|.)d|)+(읍|면|동|가|리))(^구|)((d(~|-)d|d)(가|리|)|))([ ](산(d(~|-)d|d))|)|\n" + "(([가-힣]|(d(~|-)d)|d)+(로|길))");
 
     @Retryable(
             value = {RuntimeException.class},
@@ -44,8 +43,6 @@ public class AddressConverterService {
     public Optional<DocumentDto> convertAddressToGeospatialData(String address) {
 
         // address validation check
-        Matcher matcher = ADDRESS_PATTERN.matcher(address);
-        if (!matcher.find()) return Optional.empty();
 
         KakaoApiResponseDto kakaoApiResponseDto = requestKakaoApi(address);
         //KakaoApiResponseDto kakaoApiResponseDto = retryTemplate.execute(context -> requestKakaoApi(address));

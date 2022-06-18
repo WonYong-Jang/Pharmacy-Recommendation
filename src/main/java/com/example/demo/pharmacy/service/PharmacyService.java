@@ -26,4 +26,6 @@ public class PharmacyService {
     public List<Pharmacy> findAll() {
         return pharmacyRepository.findAll();
     }
+
+
 }
