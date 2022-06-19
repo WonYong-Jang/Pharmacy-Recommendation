@@ -2,6 +2,7 @@ package com.example.demo.util;
 
 import com.example.demo.pharmacy.dto.PharmacyDto;
 import com.opencsv.CSVReader;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@Slf4j
 public class CsvUtils {
 
     public static List<PharmacyDto> convertToPharmacyDtoList() {
@@ -23,7 +25,7 @@ public class CsvUtils {
                 csvList.add(Arrays.asList(values));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("CsvUtils convertToPharmacyDtoList Fail: {}", e.getMessage());
         }
 
         return IntStream.range(1, csvList.size()).mapToObj(index -> {

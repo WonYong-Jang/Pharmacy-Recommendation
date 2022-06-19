@@ -9,14 +9,15 @@ class PharmacyRepositoryTest extends AbstractIntegrationContainerBaseTest {
     @Autowired
     PharmacyRepository pharmacyRepository
 
-    def setup() {
+    void setup() {
         pharmacyRepository.deleteAll()
     }
 
     def "PharmacyRepository save"() {
+
         given:
         String address = "서울 특별시 성북구 종암동"
-        String name = "약국이름"
+        String name = "은혜 약국"
         double latitude = 36.11
         double longitude = 128.11
 

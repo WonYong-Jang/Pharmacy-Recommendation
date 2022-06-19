@@ -3,10 +3,9 @@ package com.example.demo.api;
 import com.example.demo.pharmacy.cache.PharmacyRedisTemplateService;
 import com.example.demo.pharmacy.dto.PharmacyDto;
 import com.example.demo.pharmacy.entity.Pharmacy;
-import com.example.demo.pharmacy.service.PharmacyService;
+import com.example.demo.pharmacy.service.PharmacyRepositoryService;
 import com.example.demo.util.CsvUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PharmacyController {
 
-    private final PharmacyService pharmacyService;
+    private final PharmacyRepositoryService pharmacyRepositoryService;
     private final PharmacyRedisTemplateService pharmacyRedisTemplateService;
 
     @PostConstruct
@@ -26,17 +25,16 @@ public class PharmacyController {
         saveCsvToRedis();
     }
 
-    public String saveCsvToDatabase() {
+    public void saveCsvToDatabase() {
 
         List<Pharmacy> pharmacyList = loadPharmacyList();
-        pharmacyService.saveAll(pharmacyList);
+        pharmacyRepositoryService.saveAll(pharmacyList);
 
-        return "success";
     }
 
-    public String saveCsvToRedis() {
+    public void saveCsvToRedis() {
 
-        List<PharmacyDto> pharmacyDtoList = pharmacyService.findAll()
+        List<PharmacyDto> pharmacyDtoList = pharmacyRepositoryService.findAll()
                 .stream().map(pharmacy -> PharmacyDto.builder()
                         .id(pharmacy.getId())
                         .pharmacyName(pharmacy.getPharmacyName())
@@ -47,7 +45,6 @@ public class PharmacyController {
 
         pharmacyDtoList.forEach(pharmacyRedisTemplateService::save);
 
-        return "success";
     }
 
     private List<Pharmacy> loadPharmacyList() {

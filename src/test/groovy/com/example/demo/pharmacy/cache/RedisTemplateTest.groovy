@@ -8,10 +8,12 @@ import org.springframework.data.redis.core.ValueOperations
 class RedisTemplateTest extends AbstractIntegrationContainerBaseTest {
 
     @Autowired
-    RedisTemplate redisTemplate;
+    RedisTemplate redisTemplate
 
     def "RedisTemplate String operations"() {
+
         given:
+
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue()
         String key = "stringKey"
         String value = "hello"

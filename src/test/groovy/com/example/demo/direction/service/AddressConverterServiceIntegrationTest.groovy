@@ -23,4 +23,6 @@ class AddressConverterServiceIntegrationTest extends AbstractIntegrationContaine
         "광진구 구의동 251-455555"                 | false
         ""                                      | false
     }
+
+
 }

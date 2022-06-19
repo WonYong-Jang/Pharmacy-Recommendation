@@ -18,10 +18,10 @@ public class PharmacySearchService {
     private static final int MAX_SEARCH_COUNT = 3; // 최대 검색 갯수
     private static final double RADIUS_KM = 10.0; // 반경 10 km
 
-    private final PharmacyService pharmacyService;
+    private final PharmacyRepositoryService pharmacyRepositoryService;
 
     public List<Pair<Pharmacy, Double>> searchPharmacyList(double targetLatitude, double targetLongitude) {
-        return pharmacyService.findAll()
+        return pharmacyRepositoryService.findAll()
                 .stream().map(pharmacy ->
                         new Pair<>(pharmacy, calculateDistance(targetLatitude, targetLongitude,
                                 pharmacy.getLatitude(), pharmacy.getLongitude())))

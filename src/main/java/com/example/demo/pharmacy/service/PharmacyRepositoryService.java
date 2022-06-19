@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PharmacyService {
+public class PharmacyRepositoryService {
 
     private final PharmacyRepository pharmacyRepository;
 
