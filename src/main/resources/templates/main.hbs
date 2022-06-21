@@ -30,8 +30,8 @@
                     <form action="/search" method = "post">
                         <div>
                             <label for="address">주소를 입력하시면 주소 기준으로 가까운 약국의 위치 최대 3곳 추천드립니다.</label>
-                            <input type="text" class="form-control" id="address" name="address"
-                                   placeholder="주소(지번 또는 도로명)를 입력하세요. ex) 서울특별시 성북구 종암로 9길">
+                            <input type="text" class="form-control" id="address_kakao" name="address"
+                                   placeholder="주소(지번 또는 도로명)를 입력하세요. ex) 서울특별시 성북구 종암로 10길" readonly>
                         </div>
                         <div>
                             <button type="submit" class="btn btn-primary" id="btn-save">Search</button>
@@ -50,6 +50,22 @@
     <!--부트스트랩 js, jquery 추가-->
     <script src="/js/lib/jquery.min.js"></script>
     <script src="/js/lib/bootstrap.min.js"></script>
+
+    <!-- Kakao 우편번호 서비스 -->
+    <!-- https://postcode.map.daum.net/guide -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        window.onload = function() {
+            document.getElementById("address_kakao").addEventListener("click", function(){
+
+                new daum.Postcode({
+                    oncomplete: function(data) {
+                        document.getElementById("address_kakao").value = data.address;
+                    }
+                }).open();
+            });
+        }
+    </script>
 
 </body>
 </html>

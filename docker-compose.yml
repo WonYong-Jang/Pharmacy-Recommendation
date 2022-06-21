@@ -29,7 +29,6 @@ services:                                               # 이 항목 밑에 실�
       - pharmacy-recommendation-redis
     image: zcx5674/pharmacy-recommendation-app
     environment:
-      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
       - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
