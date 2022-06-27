@@ -23,7 +23,7 @@ group 주소 정보가 유효한 경우
     Kakao_Api --> System: 주소를 위도, 경도 변환
 |||
     System -> redis: 약국 현황 데이터 Redis 조회
-    else #Pink Failover
+    else Failover
         System -> database: Redis 장애인 경우 DB 조회
     else
 |||

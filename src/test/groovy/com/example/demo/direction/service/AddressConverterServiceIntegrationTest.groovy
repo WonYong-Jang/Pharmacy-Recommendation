@@ -24,5 +24,4 @@ class AddressConverterServiceIntegrationTest extends AbstractIntegrationContaine
         ""                                      | false
     }
 
-
 }

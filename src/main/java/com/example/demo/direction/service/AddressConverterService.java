@@ -5,15 +5,14 @@ import com.example.demo.direction.dto.KakaoApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -27,6 +26,7 @@ import java.util.Optional;
 public class AddressConverterService {
 
     private final RetryTemplate retryTemplate;
+    private final WebClient webClient;
 
     @Value("${kakao.rest.api.key}")
     private String kakaoRestApiKey;
@@ -40,10 +40,8 @@ public class AddressConverterService {
     )
     public Optional<DocumentDto> convertAddressToGeospatialData(String address) {
 
-        // address validation check
-
         KakaoApiResponseDto kakaoApiResponseDto = requestKakaoApi(address);
-        //KakaoApiResponseDto kakaoApiResponseDto = retryTemplate.execute(context -> requestKakaoApi(address));
+        //KakaoApiResponseDto kakaoApiResponseDto = retryTemplate.execute(context -> AddressConverterService.this.requestKakaoApi(address));
 
         List<DocumentDto> documentList = Optional.ofNullable(kakaoApiResponseDto).map(KakaoApiResponseDto::getDocumentList).orElse(Collections.emptyList());
 
@@ -56,16 +54,15 @@ public class AddressConverterService {
         uriBuilder.queryParam("query", address);
 
         URI uri = uriBuilder.build().encode().toUri();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "KakaoAK " + kakaoRestApiKey);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
         log.info("AddressConverterService requestKakaoApi. address: {}, uri: {}", address, uri);
 
-        RestTemplate restTemplate = new RestTemplate();
-        KakaoApiResponseDto kakaoApiResponseDto = restTemplate.exchange(uri, HttpMethod.GET, entity, KakaoApiResponseDto.class).getBody();
-        return kakaoApiResponseDto;
+        return webClient.get()
+                .uri(uri)
+                .header(HttpHeaders.AUTHORIZATION, "KakaoAK " + kakaoRestApiKey)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(KakaoApiResponseDto.class)
+                .block();
     }
 
     @Recover

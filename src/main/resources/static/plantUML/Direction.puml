@@ -18,7 +18,7 @@ Requester -> System: 길안내 요청
 |||
 note left: http://{ip}/dir/{encodedId}
 
-System -> database: 테이블 조회(출발지, 도착지 정보)
+System -> database: 테이블 조회(약국 길안내 정보)
 database --> System: response
 |||
 

@@ -1,4 +1,4 @@
-version: "3.8"                                            # 파일 규격 버전
+version: "3.8"                                          # 파일 규격 버전
 services:                                               # 이 항목 밑에 실행하려는 컨테이너 들을 정의
   pharmacy-recommendation-redis:                                         # 서비스명
     container_name: pharmacy-recommendation-redis       # 컨테이너 명
@@ -35,3 +35,6 @@ services:                                               # 이 항목 밑에 실�
       - KAKAO_REST_API_KEY=${KAKAO_REST_API_KEY}
     ports:
       - "80:8080"
+    restart: always # depends on은 실행 순서만 컨트롤 할뿐,
+                    # 컨테이너 안의 서비스가 실행가능한 상태인지까지는 확인 하지 않기 때문에
+                    # 실패했을 경우 재시작하도록
