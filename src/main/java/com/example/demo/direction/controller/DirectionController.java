@@ -1,4 +1,4 @@
-package com.example.demo.api;
+package com.example.demo.direction.controller;
 
 import com.example.demo.direction.entity.Direction;
 import com.example.demo.direction.service.DirectionService;

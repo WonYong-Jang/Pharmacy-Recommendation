@@ -1,4 +1,4 @@
-package com.example.demo.direction.dto;
+package com.example.demo.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

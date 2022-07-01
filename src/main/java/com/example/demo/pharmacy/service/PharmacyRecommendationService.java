@@ -1,6 +1,6 @@
 package com.example.demo.pharmacy.service;
 
-import com.example.demo.direction.dto.DocumentDto;
+import com.example.demo.api.dto.DocumentDto;
 import com.example.demo.direction.dto.OutputDto;
 import com.example.demo.direction.entity.Direction;
 import com.example.demo.direction.service.AddressConverterService;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;

@@ -1,4 +1,4 @@
-package com.example.demo.api;
+package com.example.demo.pharmacy.controller;
 
 import com.example.demo.pharmacy.cache.PharmacyRedisTemplateService;
 import com.example.demo.pharmacy.dto.PharmacyDto;
