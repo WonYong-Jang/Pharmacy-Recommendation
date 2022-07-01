@@ -1,4 +1,6 @@
-# Pharmacy-Recommendation
+# Pharmacy-Recommendation   
+
+해당 코드는 [패스트 캠퍼스 강의](https://fastcampus.co.kr/dev_online_befinal)에서 사용됩니다.   
  
 [외부 API(카카오 주소 검색 API](https://developers.kakao.com/docs/latest/ko/local/dev-guide))와 [공공 데이터(약국 현황 정보)](https://www.data.go.kr/data/15065023/fileData.do)를 활용함으로써 
 혼자 개발하고 마무리되는 프로젝트가 아닌 실제 서비스 가능한 수준의 
@@ -13,10 +15,10 @@
   - 약국 현황 데이터(공공 데이터)를 관리하고 있다 라고 가정하고, 약국 현황 데이터는 위도 경도의 위치 정보 데이터를 가지고 있다.
   - 해당 서비스로 주소정보를 입력하여 요청하면 위치 기준에서 가까운 약국 3 곳을 추출한다.
   - 주소는 도로명 주소 또는 지번을 입력하여 요청 받는다.
-  - 주소는 정확한 상세주소(동, 호수)를 입력하지 않아도 출발지로 지정할 수 있다.
+  - 주소는 정확한 상세주소(동, 호수)를 제외한 주소 정보를 이용하여 추천 한다.   
     - ex) 서울 성북구 종암로 10길
-  - 입력 받은 주소를 위도, 경도로 변환하여 기존 약국 데이터와 비교 및 가까운 약국을 찾는다.    
-  - 입력한 주소정보에서 정해진 반경(10km) 내에 있는 약국만 추천한다.   
+  - 입력 받은 주소를 위도, 경도로 변환 하여 기존 약국 데이터와 비교 및 가까운 약국을 찾는다.    
+  - 입력한 주소정보에서 정해진 반경(10km) 내에 있는 약국만 추천 한다.   
   - 추출한 약국 데이터는 길안내 URL 및 로드뷰 URL로 제공한다.   
     - ex) 
     https://map.kakao.com/link/to/카카오판교오피스,37.402056,127.108212    
@@ -29,7 +31,7 @@
   
 ## Pharmacy Recommendation Process   
 
-<img width="615" alt="스크린샷 2022-04-19 오후 12 58 50" src="https://user-images.githubusercontent.com/26623547/163917670-33f1c8bb-d23f-4552-958d-6096ecb75ebb.png">   
+<img width="615" alt="스크린샷 2022-07-01 오후 6 47 18" src="https://user-images.githubusercontent.com/26623547/176872242-8d893c57-3973-4e3e-b822-3beaeada26ec.png">   
 
 ## Direction Shorten Url Process
 
