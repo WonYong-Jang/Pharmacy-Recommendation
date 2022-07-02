@@ -6,12 +6,14 @@ import com.example.demo.pharmacy.entity.Pharmacy;
 import com.example.demo.pharmacy.service.PharmacyRepositoryService;
 import com.example.demo.util.CsvUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class PharmacyController {
@@ -41,7 +43,8 @@ public class PharmacyController {
                         .pharmacyAddress(pharmacy.getPharmacyAddress())
                         .latitude(pharmacy.getLatitude())
                         .longitude(pharmacy.getLongitude())
-                        .build()).collect(Collectors.toList());
+                        .build())
+                .collect(Collectors.toList());
 
         pharmacyDtoList.forEach(pharmacyRedisTemplateService::save);
 

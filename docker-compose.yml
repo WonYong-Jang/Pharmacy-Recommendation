@@ -1,6 +1,6 @@
 version: "3.8"                                          # 파일 규격 버전
-services:                                               # 이 항목 밑에 실행하려는 컨테이너 들을 정의
-  pharmacy-recommendation-redis:                                         # 서비스명
+services:                                               # 이 항목 밑에 실행하려는 컨테이너들을 정의
+  pharmacy-recommendation-redis:                        # 서비스명
     container_name: pharmacy-recommendation-redis       # 컨테이너 명
     build:
       dockerfile: Dockerfile
@@ -13,12 +13,11 @@ services:                                               # 이 항목 밑에 실�
       context: ./database
     image: zcx5674/pharmacy-recommendation-database
     environment:
-      - MARIADB_DATABASE=pharmacyRecommendation
-      - MARIADB_ROOT_PASSWORD=1234
+      - MARIADB_DATABASE=pharmacy-recommendation
+      - MARIADB_ROOT_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
       - TZ=Asia/Seoul    # 컨테이너 내의 시스템 타임존을 우리나라에 맞게 설정합니다.
     volumes:
       - ./database/config:/etc/mysql/conf.d
-    command: [ '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
     ports:
       - "3306:3306"      # 접근 포트 설정 (컨테이너 외부:컨테이너 내부)
   pharmacy-recommendation-app:
@@ -33,8 +32,9 @@ services:                                               # 이 항목 밑에 실�
       - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
       - KAKAO_REST_API_KEY=${KAKAO_REST_API_KEY}
+      - TZ=Asia/Seoul # 타임존 한국으로 설정
     ports:
       - "80:8080"
     restart: always # depends on은 실행 순서만 컨트롤 할뿐,
                     # 컨테이너 안의 서비스가 실행가능한 상태인지까지는 확인 하지 않기 때문에
-                    # 실패했을 경우 재시작하도록
+                    # DB 또는 Redis가 아직 실행가능한 상태가 아니여서 실패하는 경우 재시작 하도록 설정

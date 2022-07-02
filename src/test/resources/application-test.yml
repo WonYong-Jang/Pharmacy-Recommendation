@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-    url: jdbc:tc:mariadb:10:///pharmacyRecommendation
+    url: jdbc:tc:mariadb:10:///pharmacy-recommendation
     username: root
     password: 1234
 

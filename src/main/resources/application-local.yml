@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://pharmacy-recommendation-database:3306/pharmacyRecommendation
+    url: jdbc:mariadb://pharmacy-recommendation-database:3306/pharmacy-recommendation
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
   redis:
