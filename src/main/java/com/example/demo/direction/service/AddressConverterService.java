@@ -24,6 +24,8 @@ public class AddressConverterService {
     public Optional<DocumentDto> convertAddressToGeospatialData(String address)  {
 
         KakaoApiResponseDto kakaoApiResponseDto = kakaoAddressSearchService.requestAddressSearch(address);
+
+        // retryTemplate 사용하는 예제
         //KakaoApiResponseDto kakaoApiResponseDto = retryTemplate.execute(context -> AddressConverterService.this.requestKakaoApi(address));
 
         List<DocumentDto> documentList =

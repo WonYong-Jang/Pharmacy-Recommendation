@@ -73,4 +73,4 @@
 
 <img width="1300" alt="스크린샷 2022-06-23 오후 8 04 48" src="https://user-images.githubusercontent.com/26623547/175286356-deefcf5d-f94e-49c3-b0f0-4f2c2e3ed50a.png">
 
-<img width="1300" alt="스크린샷 2022-06-23 오후 8 14 54" src="https://user-images.githubusercontent.com/26623547/175286374-5c61ac22-729e-40b1-a74b-a21b384fa289.png">
+<img width="1300" alt="스크린샷 2022-07-04 오후 11 35 48" src="https://user-images.githubusercontent.com/26623547/177176044-ec4d7809-94d1-4fe8-9837-16a9c8c0cd7a.png">

@@ -11,4 +11,5 @@ public class OutputDto {
     private String pharmacyAddress;
     private String directionUrl;
     private String roadViewUrl;
+    private String distance;
 }
