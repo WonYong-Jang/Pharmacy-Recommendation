@@ -3,25 +3,34 @@ package com.example.demo.api.service
 import com.example.demo.AbstractIntegrationContainerBaseTest
 import org.springframework.beans.factory.annotation.Autowired
 
+import java.util.stream.Collectors
+
 class KakaoCategorySearchServiceTest extends AbstractIntegrationContainerBaseTest {
 
     @Autowired
     KakaoCategorySearchService kakaoCategorySearchService
 
-    def "test"() {
+    def "requestCategorySearch sort by distance"() {
         given:
-        double x = 127.037033003036
-        double y = 37.5960650456809
-        double radius = 20.0
+        double x = 127.037033003036 // longitude
+        double y = 37.5960650456809 // latitude
+        double radius = 10.0 // km
 
         when:
         def result = kakaoCategorySearchService.requestCategorySearch(y, x, radius)
 
+        def inputList = result.getDocumentList().stream()
+                .map(t -> t.getDistance())
+                .collect(Collectors.toList())
+        def outputList = inputList.stream()
+                .sorted()
+                .collect(Collectors.toList())
+
         then:
-        result.getDocumentList().forEach(t -> {
-            println t.getAddressName()
-            println t.getDistance()
-            println t.getPlaceName()
-        })
+        inputList == outputList
+        inputList.size() == outputList.size()
+        assert result.getDocumentList().every() {
+            it.getDistance() <= radius * 1000
+        }
     }
 }

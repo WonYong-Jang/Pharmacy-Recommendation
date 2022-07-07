@@ -29,7 +29,7 @@ group 주소 정보가 유효한 경우
 |||
     System -> System: 가장 가까운 약국 3개 추출
 |||
-    System -> database: 길안내 URL 저장(위도, 경도, 출발지, 목적지)
+    System -> database: 길안내 URL 저장(약국 길안내 정보)
 |||
     System -> Requester: 추천 약국 길안내 제공
 end

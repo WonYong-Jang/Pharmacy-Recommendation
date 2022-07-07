@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class Base62Service {
 
+    // https://github.com/seruco/base62
     private static final Base62 base62Instance = Base62.createInstance();
 
     public String encodeDirectionId(Long directionId) {

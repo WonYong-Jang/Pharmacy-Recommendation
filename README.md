@@ -20,9 +20,9 @@
   - 입력 받은 주소를 위도, 경도로 변환 하여 기존 약국 데이터와 비교 및 가까운 약국을 찾는다.    
   - 입력한 주소정보에서 정해진 반경(10km) 내에 있는 약국만 추천 한다.   
   - 추출한 약국 데이터는 길안내 URL 및 로드뷰 URL로 제공한다.   
-    - ex) 
-    https://map.kakao.com/link/to/카카오판교오피스,37.402056,127.108212    
-    https://map.kakao.com/link/roadview/37.402056,127.108212     
+    - ex)    
+    길안내 URL : https://map.kakao.com/link/to/카카오판교오피스,37.402056,127.108212    
+    로드뷰 URL : https://map.kakao.com/link/roadview/37.402056,127.108212     
 
   - 길안내 URL은 고객에게 제공되기 때문에 가독성을 위해 shorten url로 제공한다.
   - shorten url에 사용되는 key값은 인코딩하여 제공한다.
@@ -31,11 +31,11 @@
   
 ## Pharmacy Recommendation Process   
 
-<img width="615" alt="스크린샷 2022-07-01 오후 6 47 18" src="https://user-images.githubusercontent.com/26623547/176872242-8d893c57-3973-4e3e-b822-3beaeada26ec.png">   
+<img width="615" alt="스크린샷 2022-07-07 오후 1 58 39" src="https://user-images.githubusercontent.com/26623547/177694773-b53d1251-652f-41e6-8f19-c32b931d4b5b.png">         
 
 ## Direction Shorten Url Process
 
-<img width="615" alt="스크린샷 2022-06-23 오후 9 42 58" src="https://user-images.githubusercontent.com/26623547/175301168-ee35793c-18ff-4a4a-8610-7a9455e9fef7.png">  
+<img width="615" alt="스크린샷 2022-06-23 오후 9 42 58" src="https://user-images.githubusercontent.com/26623547/175301168-ee35793c-18ff-4a4a-8610-7a9455e9fef7.png">    
 
 
 ## Feature List   

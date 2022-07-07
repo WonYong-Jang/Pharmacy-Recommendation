@@ -1,6 +1,7 @@
 package com.example.demo.direction.service;
 
 import com.example.demo.api.dto.DocumentDto;
+import com.example.demo.api.service.KakaoCategorySearchService;
 import com.example.demo.direction.entity.Direction;
 import com.example.demo.direction.repository.DirectionRepository;
 import com.example.demo.pharmacy.service.PharmacySearchService;
@@ -11,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -19,9 +22,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DirectionService {
 
+    private static final int MAX_SEARCH_COUNT = 3; // 최대 검색 갯수
+    private static final double RADIUS_KM = 10.0; // 반경 10 km
+
     private final PharmacySearchService pharmacySearchService;
     private final DirectionRepository directionRepository;
     private final Base62Service base62Service;
+
+    private final KakaoCategorySearchService kakaoCategorySearchService;
 
     @Transactional
     public List<Direction> saveAll(List<Direction> directionList) {
@@ -37,6 +45,7 @@ public class DirectionService {
     }
 
     public List<Direction> buildDirectionList(DocumentDto documentDto) {
+        if(Objects.isNull(documentDto)) return Collections.emptyList();
 
         return pharmacySearchService.searchPharmacyDtoList()
                 .stream().map(pharmacyDto ->
@@ -52,6 +61,31 @@ public class DirectionService {
                                         calculateDistance(documentDto.getLatitude(), documentDto.getLongitude(),
                                                 pharmacyDto.getLatitude(), pharmacyDto.getLongitude()))
                                 .build())
+                .filter(direction -> direction.getDistance() <= RADIUS_KM)
+                .sorted(Comparator.comparing(Direction::getDistance))
+                .limit(MAX_SEARCH_COUNT)
+                .collect(Collectors.toList());
+    }
+
+    // pharmacy search by category kakao api
+    public List<Direction> buildDirectionByApiList(DocumentDto inputDocumentDto) {
+        if(Objects.isNull(inputDocumentDto)) return Collections.emptyList();
+
+        return kakaoCategorySearchService
+                .requestCategorySearch(inputDocumentDto.getLatitude(), inputDocumentDto.getLongitude(), RADIUS_KM)
+                .getDocumentList()
+                .stream().map(resultDocumentDto ->
+                        Direction.builder()
+                                .inputAddress(inputDocumentDto.getAddressName())
+                                .inputLatitude(inputDocumentDto.getLatitude())
+                                .inputLongitude(inputDocumentDto.getLongitude())
+                                .targetPharmacyName(resultDocumentDto.getPlaceName())
+                                .targetAddress(resultDocumentDto.getAddressName())
+                                .targetLatitude(resultDocumentDto.getLatitude())
+                                .targetLongitude(resultDocumentDto.getLongitude())
+                                .distance(resultDocumentDto.getDistance() * 0.001)
+                                .build())
+                .limit(MAX_SEARCH_COUNT)
                 .collect(Collectors.toList());
     }
 

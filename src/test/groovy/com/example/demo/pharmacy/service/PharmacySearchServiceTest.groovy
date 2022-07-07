@@ -1,6 +1,6 @@
 package com.example.demo.pharmacy.service
 
-import com.example.demo.pharmacy.dto.PharmacyDto
+
 import com.example.demo.pharmacy.entity.Pharmacy
 import com.google.common.collect.Lists
 import spock.lang.Specification
@@ -34,7 +34,7 @@ class PharmacySearchServiceTest extends Specification {
         )
     }
 
-    def "searchPharmacyDtoList"() {
+    def "searchPharmacyDtoList convert pharmacyList to pharmacyDtoList"() {
         when:
         pharmacyRepositoryService.findAll() >> pharmacyList
         def result = pharmacySearchService.searchPharmacyDtoList()
@@ -45,6 +45,16 @@ class PharmacySearchServiceTest extends Specification {
         result.get(0).getPharmacyName() == "호수온누리약국"
         result.get(1).getId() == 2
         result.get(1).getPharmacyName() == "돌곶이온누리약국"
+    }
+
+    def "searchPharmacyDtoList return empty list if pharmacyList is empty"() {
+        when:
+        pharmacyRepositoryService.findAll() >> []
+        def result = pharmacySearchService.searchPharmacyDtoList()
+
+        then:
+        result.size() == 0
+        result.empty
     }
 
 //    def "searchPharmacyList 입력 위, 경도 기준으로 거리순 정렬이 되는지 확인"() {

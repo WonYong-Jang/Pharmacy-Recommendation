@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -22,8 +21,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PharmacyRecommendationService {
 
-    private static final int MAX_SEARCH_COUNT = 3; // 최대 검색 갯수
-    private static final double RADIUS_KM = 10.0; // 반경 10 km
     private static final String ROAD_VIEW_BASE_URL = "https://map.kakao.com/link/roadview/";
 
     private final AddressConverterService addressConverterService;
@@ -43,12 +40,7 @@ public class PharmacyRecommendationService {
             return Collections.emptyList();
         }
 
-        List<Direction> directionList = directionService.buildDirectionList(documentDto)
-                .stream()
-                .filter(direction -> direction.getDistance() <= RADIUS_KM)
-                .sorted(Comparator.comparing(Direction::getDistance))
-                .limit(MAX_SEARCH_COUNT)
-                .collect(Collectors.toList());
+        List<Direction> directionList = directionService.buildDirectionList(documentDto);
 
         return directionService.saveAll(directionList)
                 .stream()
