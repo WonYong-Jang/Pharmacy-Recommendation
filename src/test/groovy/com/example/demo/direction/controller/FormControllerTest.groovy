@@ -6,23 +6,20 @@ import com.example.demo.pharmacy.service.PharmacyRecommendationService
 import org.assertj.core.util.Lists
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.ResultActions
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
-import org.springframework.web.filter.CharacterEncodingFilter
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*
 
 class FormControllerTest extends Specification {
 
     private MockMvc mockMvc
     private PharmacyRecommendationService pharmacyRecommendationService = Mock()
-    private ObjectMapper objectMapper
     private List<OutputDto> outputDtoList
 
     def setup() {
@@ -38,8 +35,6 @@ class FormControllerTest extends Specification {
                         .pharmacyName("pharmacy2")
                         .build()
         )
-
-        objectMapper = new ObjectMapper()
     }
 
     def "GET /"() {
@@ -54,17 +49,21 @@ class FormControllerTest extends Specification {
 
     def "POST /search"() {
         given:
+        String address = "서울 성북구 종암동"
         InputDto inputDto = new InputDto()
-        inputDto.setAddress("서울 성북구")
+        inputDto.setAddress(address)
 
         when:
-        pharmacyRecommendationService.recommendPharmacyList(_) >> outputDtoList
         ResultActions result = mockMvc.perform(
                 post("/search")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(inputDto)))
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED) // @ModelAttribute 매핑 검증을 위한 content type 지정
+                        .content("address=서울 성북구 종암동"))
 
         then:
+        1 * pharmacyRecommendationService.recommendPharmacyList({argument ->
+            assert argument == address // mock 객체의 argument 검증
+        }) >> outputDtoList
+
         result.andExpect(status().isOk())
                 .andExpect(view().name("output"))
                 .andExpect(model().attributeExists("outputFormList"))

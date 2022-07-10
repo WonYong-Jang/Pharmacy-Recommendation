@@ -3,6 +3,7 @@ package com.example.demo.direction.controller
 import com.example.demo.direction.entity.Direction
 import com.example.demo.direction.service.DirectionService
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.ResultActions
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
@@ -34,11 +35,11 @@ class DirectionControllerTest extends Specification {
 
         when:
         directionService.findById(_) >> direction
-        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/dir/{encodedId}", "r"))
+        ResultActions result = mockMvc.perform(get("/dir/{encodedId}", "r"))
 
         then:
-        result.andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(redirectURL))
+        result.andExpect(status().is3xxRedirection())  // 리다이렉트 발생 확인
+                .andExpect(redirectedUrl(redirectURL)) // 리다이렉트 경로 검증
                 .andDo(print())
     }
 }

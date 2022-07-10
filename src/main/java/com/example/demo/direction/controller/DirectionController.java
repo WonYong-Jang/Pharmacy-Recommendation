@@ -15,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class DirectionController {
 
     private final DirectionService directionService;
+    private static final String KAKAO_DIRECTION_BASE_URL = "https://map.kakao.com/link/map/";
 
     @GetMapping("/dir/{encodedId}")
     public String searchDirection(@PathVariable("encodedId") String encodedId) {
@@ -23,10 +24,11 @@ public class DirectionController {
 
         String params = String.join(",", resultDirection.getTargetAddress(),
                 String.valueOf(resultDirection.getTargetLatitude()), String.valueOf(resultDirection.getTargetLongitude()));
-        String result = UriComponentsBuilder.fromHttpUrl("https://map.kakao.com/link/map/" + params)
+        String result = UriComponentsBuilder.fromHttpUrl(KAKAO_DIRECTION_BASE_URL + params)
                 .toUriString();
+
+        log.info("[DirectionController searchDirection] direction url: {}", result);
 
         return "redirect:"+result;
     }
-
 }
