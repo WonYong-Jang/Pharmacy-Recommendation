@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,11 +34,16 @@ public class PharmacyRedisTemplateService {
         try {
             hashOperations.put(CACHE_KEY, pharmacyDto.getId(), pharmacyDto);
         } catch (Exception e) {
-            log.error("PharmacyDto save error ", e);
+            log.error("[PharmacyRedisTemplateService save error] ", e);
         }
     }
 
     public List<PharmacyDto> findAll() {
-        return new ArrayList<>(hashOperations.entries(CACHE_KEY).values());
+        try {
+            return new ArrayList<>(hashOperations.entries(CACHE_KEY).values());
+        } catch (Exception e) {
+            log.error("[PharmacyRedisTemplateService findAll error] ", e);
+            return Collections.emptyList();
+        }
     }
 }

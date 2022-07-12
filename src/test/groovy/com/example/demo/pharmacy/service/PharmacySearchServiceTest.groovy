@@ -1,6 +1,6 @@
 package com.example.demo.pharmacy.service
 
-
+import com.example.demo.pharmacy.cache.PharmacyRedisTemplateService
 import com.example.demo.pharmacy.entity.Pharmacy
 import com.google.common.collect.Lists
 import spock.lang.Specification
@@ -12,11 +12,12 @@ class PharmacySearchServiceTest extends Specification {
     private PharmacySearchService pharmacySearchService
 
     private PharmacyRepositoryService pharmacyRepositoryService = Mock()
+    private PharmacyRedisTemplateService pharmacyRedisTemplateService = Mock()
 
     private List<Pharmacy> pharmacyList
 
     def setup() {
-        pharmacySearchService = new PharmacySearchService(pharmacyRepositoryService)
+        pharmacySearchService = new PharmacySearchService(pharmacyRepositoryService, pharmacyRedisTemplateService)
 
         pharmacyList = Lists.newArrayList(
                 Pharmacy.builder()

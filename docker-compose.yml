@@ -15,7 +15,6 @@ services:                                               # 이 항목 밑에 실�
     environment:
       - MARIADB_DATABASE=pharmacy-recommendation
       - MARIADB_ROOT_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
-      - TZ=Asia/Seoul    # 컨테이너 내의 시스템 타임존을 우리나라에 맞게 설정합니다.
     volumes:
       - ./database/config:/etc/mysql/conf.d
     ports:
