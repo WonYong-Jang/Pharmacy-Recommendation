@@ -49,6 +49,16 @@ dependencies {
     testImplementation('net.bytebuddy:byte-buddy:1.12.10')
 }
 
-'test' {
+test {
     useJUnitPlatform()
+}
+
+
+processTestResources {
+
+    boolean hasProperty = project.hasProperty("KAKAO_REST_API_KEY")
+    System.out.println("Set kakao est api key: $hasProperty")
+    filesMatching('**/application-test.yml') {
+        expand(project.properties)
+    }
 }
