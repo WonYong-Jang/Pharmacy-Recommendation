@@ -31,7 +31,6 @@ services:                                               # 이 항목 밑에 실�
       - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
       - KAKAO_REST_API_KEY=${KAKAO_REST_API_KEY}
-      - TZ=Asia/Seoul # 타임존 한국으로 설정
     ports:
       - "80:8080"
     restart: always # depends on은 실행 순서만 컨트롤 할뿐,
