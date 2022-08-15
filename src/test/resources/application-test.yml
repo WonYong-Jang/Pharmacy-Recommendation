@@ -4,6 +4,10 @@ spring:
     url: jdbc:tc:mariadb:10:///pharmacy-recommendation
     username: root
     password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
 
 pharmacy:
   recommendation:

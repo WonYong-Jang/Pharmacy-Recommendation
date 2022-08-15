@@ -3,6 +3,7 @@ package com.example.demo.api.service;
 import com.example.demo.api.dto.KakaoApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.IOException;
 import java.net.URI;
 
 @Service
@@ -35,6 +35,8 @@ public class KakaoAddressSearchService {
             backoff = @Backoff(delay = 2000)
     )
     public KakaoApiResponseDto requestAddressSearch(String address) {
+
+        if(StringUtils.isEmpty(address)) return null;
 
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(KAKAO_LOCAL_SEARCH_ADDRESS_URL);
         uriBuilder.queryParam("query", address);

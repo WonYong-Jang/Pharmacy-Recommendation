@@ -1,9 +1,55 @@
 spring:
   profiles:
+    active: local # default profile
     group:
-      "local": "local"
-      "prod": "prod"
+      local:
+        - local
+        - common
+      prod:
+        - prod
+        - common
+
+---
+spring:
+  config:
+    activate:
+      on-profile: common
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://pharmacy-recommendation-database:3306/pharmacy-recommendation
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  redis:
+    host: pharmacy-recommendation-redis
+    port: 6379
   jpa:
     hibernate:
       ddl-auto: create
     show-sql: true
+
+kakao:
+  rest:
+    api:
+      key: ${KAKAO_REST_API_KEY}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+pharmacy:
+  recommendation:
+    base:
+      url: http://localhost/dir/
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+pharmacy:
+  recommendation:
+    base:
+      url: http://3.38.78.187/dir/
