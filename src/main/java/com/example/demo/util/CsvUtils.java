@@ -17,7 +17,7 @@ public class CsvUtils {
 
     public static List<PharmacyDto> convertToPharmacyDtoList() {
 
-        String file = "/pharmacy.csv";
+        String file = "./pharmacy.csv";
         List<List<String>> csvList = new ArrayList<>();
         try (CSVReader csvReader = new CSVReader(new FileReader(file))) {
             String[] values = null;

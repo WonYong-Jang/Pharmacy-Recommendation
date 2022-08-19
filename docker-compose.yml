@@ -6,6 +6,8 @@ services:                                               # 이 항목 밑에 실�
       dockerfile: Dockerfile
       context: ./redis
     image: zcx5674/pharmacy-recommendation-redis
+    ports:
+      - "6379:6379"
   pharmacy-recommendation-database:
     container_name: pharmacy-recommendation-database
     build:

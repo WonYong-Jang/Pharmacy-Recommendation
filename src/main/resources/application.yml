@@ -14,18 +14,6 @@ spring:
   config:
     activate:
       on-profile: common
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://pharmacy-recommendation-database:3306/pharmacy-recommendation
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
-  redis:
-    host: pharmacy-recommendation-redis
-    port: 6379
-  jpa:
-    hibernate:
-      ddl-auto: create
-    show-sql: true
 
 kakao:
   rest:
@@ -37,17 +25,41 @@ spring:
   config:
     activate:
       on-profile: local
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/pharmacy-recommendation
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  redis:
+    host: localhost
+    port: 6379
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
 
 pharmacy:
   recommendation:
     base:
-      url: http://localhost/dir/
+      url: http://localhost:8080/dir/
 
 ---
 spring:
   config:
     activate:
       on-profile: prod
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://pharmacy-recommendation-database:3306/pharmacy-recommendation
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  redis:
+    host: pharmacy-recommendation-redis
+    port: 6379
+  jpa:
+    hibernate:
+      ddl-auto: create # prod 배포시 validate
+    show-sql: true
 
 pharmacy:
   recommendation:

@@ -1,0 +1,23 @@
+version: "3.8"                                          # 파일 규격 버전
+services:                                               # 이 항목 밑에 실행하려는 컨테이너들을 정의
+  pharmacy-recommendation-redis:                        # 서비스명
+    container_name: pharmacy-recommendation-redis       # 컨테이너 명
+    build:
+      dockerfile: Dockerfile
+      context: ./redis
+    image: zcx5674/pharmacy-recommendation-redis
+    ports:
+      - "6379:6379"
+  pharmacy-recommendation-database:
+    container_name: pharmacy-recommendation-database
+    build:
+      dockerfile: Dockerfile
+      context: ./database
+    image: zcx5674/pharmacy-recommendation-database
+    environment:
+      - MARIADB_DATABASE=pharmacy-recommendation
+      - MARIADB_ROOT_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+    volumes:
+      - ./database/config:/etc/mysql/conf.d
+    ports:
+      - "3306:3306"      # 접근 포트 설정 (컨테이너 외부:컨테이너 내부)
