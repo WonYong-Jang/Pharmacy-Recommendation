@@ -1,82 +1,85 @@
 package com.example.demo.api.service
 
 import com.example.demo.AbstractIntegrationContainerBaseTest
+import com.example.demo.api.dto.DocumentDto
 import com.example.demo.api.dto.KakaoApiResponseDto
+import com.example.demo.api.dto.MetaDto
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.spockframework.spring.SpringSpy
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
+import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
+import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
-import org.springframework.test.web.client.MockRestServiceServer
-import org.springframework.web.client.RestTemplate
-
-import static org.springframework.test.web.client.ExpectedCount.times
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.method
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withException
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess
+import reactor.core.Exceptions
 
 class KakaoAddressSearchServiceRetryTest extends AbstractIntegrationContainerBaseTest {
 
     @Autowired
     private KakaoAddressSearchService kakaoAddressSearchService
 
-    @SpringSpy
-    private RestTemplate restTemplate
+    @SpringBean
+    private KakaoUriBuilderService kakaoUriBuilderService = Mock()
 
-    private MockRestServiceServer mockServer
+    private MockWebServer mockWebServer
+
     private ObjectMapper mapper = new ObjectMapper()
-    private String baseUrl = "https://dapi.kakao.com/v2/local/search/address.json?query="
 
     def setup() {
-        mockServer = MockRestServiceServer.createServer(restTemplate)
+        mockWebServer = new MockWebServer()
+        mockWebServer.start()
     }
 
     def cleanup() {
-        mockServer.verify()
+        mockWebServer.shutdown()
     }
 
-    def "Verify that requestAddressSearch method is recovery when it failed twice "() {
+    def "requestAddressSearch retry success"() {
         given:
-        def address = "address"
+        def address = "서울 성북구 종암로 10길"
+        def metaDto = new MetaDto(1)
+        def documentDto = DocumentDto.builder()
+                .addressName(address)
+                .build()
+        def expectedResponse = new KakaoApiResponseDto(metaDto, Arrays.asList(documentDto))
+        def uri = mockWebServer.url("/").uri()
 
         when:
-        mockServer.expect(times(2), requestTo(new URI(baseUrl + address)))
-                .andExpect(method(HttpMethod.GET))
-                .andRespond(withException(new IOException("error")))
+        kakaoUriBuilderService.buildUriByAddressSearch(address) >> uri
 
-        def result = kakaoAddressSearchService.requestAddressSearch(address)
+        mockWebServer.enqueue(new MockResponse().setResponseCode(429))
+        mockWebServer.enqueue(new MockResponse().setResponseCode(429))
+        mockWebServer.enqueue(new MockResponse().setResponseCode(429))
+        mockWebServer.enqueue(new MockResponse().setResponseCode(200)
+                .setBody(mapper.writeValueAsString(expectedResponse))
+                .addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+
+        def kakaoApiResult = kakaoAddressSearchService.requestAddressSearch(address)
 
         then:
-        2 * restTemplate.exchange(_, _, _, _)
-        result == null
+        def takeRequest = mockWebServer.takeRequest()
+        takeRequest.getMethod() == "GET"
+        kakaoApiResult.getDocumentList().size() == 1
+        kakaoApiResult.getMetaDto().totalCount == 1
+        kakaoApiResult.getDocumentList().get(0).getAddressName() == address
     }
 
-    def "Verify that requestAddressSearch method is retry when it failed once "() {
+    def "requestAddressSearch retry fail "() {
         given:
-        ResponseEntity<KakaoApiResponseDto> response = new ResponseEntity<KakaoApiResponseDto>(HttpStatus.OK)
-        def address = "address"
+        def address = "서울 성북구 종암로 10길"
+        def uri = mockWebServer.url("/").uri()
 
         when:
+        kakaoUriBuilderService.buildUriByAddressSearch(address) >> uri
 
-        mockServer.expect(times(1), requestTo(new URI(baseUrl + address)))
-                .andExpect(method(HttpMethod.GET))
-                .andRespond(request -> {
-                    throw new Exception("error")
-                })
+        mockWebServer.enqueue(new MockResponse().setResponseCode(429))
+        mockWebServer.enqueue(new MockResponse().setResponseCode(429))
+        mockWebServer.enqueue(new MockResponse().setResponseCode(429))
+        mockWebServer.enqueue(new MockResponse().setResponseCode(429))
 
-        mockServer.expect(requestTo(new URI(baseUrl + address)))
-                .andExpect(method(HttpMethod.GET))
-                .andRespond(withSuccess(
-                        mapper.writeValueAsString(response), MediaType.APPLICATION_JSON)
-                )
-
-        def result = kakaoAddressSearchService.requestAddressSearch(address)
+        kakaoAddressSearchService.requestAddressSearch(address)
 
         then:
-        2 * restTemplate.exchange(_, _, _, _)
-        result != null
+        def e = thrown(Exceptions.RetryExhaustedException.class)
     }
 }

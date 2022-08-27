@@ -30,7 +30,5 @@ class KakaoAddressSearchServiceTest extends AbstractIntegrationContainerBaseTest
         result.documentList.size() > 0
         result.metaDto.totalCount > 0
         result.documentList.get(0).addressName != null
-        println result.documentList.get(0).latitude
-        println result.documentList.get(0).longitude
     }
 }

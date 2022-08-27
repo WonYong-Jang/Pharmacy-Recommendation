@@ -5,7 +5,6 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 .env
-application-private.yml
 
 ### STS ###
 .apt_generated
