@@ -25,6 +25,8 @@ class KakaoAddressSearchServiceRetryTest extends AbstractIntegrationContainerBas
 
     private ObjectMapper mapper = new ObjectMapper()
 
+    private String inputAddress = "서울 성북구 종암로 10길"
+
     def setup() {
         mockWebServer = new MockWebServer()
         mockWebServer.start()
@@ -36,50 +38,44 @@ class KakaoAddressSearchServiceRetryTest extends AbstractIntegrationContainerBas
 
     def "requestAddressSearch retry success"() {
         given:
-        def address = "서울 성북구 종암로 10길"
         def metaDto = new MetaDto(1)
         def documentDto = DocumentDto.builder()
-                .addressName(address)
+                .addressName(inputAddress)
                 .build()
         def expectedResponse = new KakaoApiResponseDto(metaDto, Arrays.asList(documentDto))
         def uri = mockWebServer.url("/").uri()
 
         when:
-        kakaoUriBuilderService.buildUriByAddressSearch(address) >> uri
-
-        mockWebServer.enqueue(new MockResponse().setResponseCode(429))
-        mockWebServer.enqueue(new MockResponse().setResponseCode(429))
         mockWebServer.enqueue(new MockResponse().setResponseCode(429))
         mockWebServer.enqueue(new MockResponse().setResponseCode(200)
-                .setBody(mapper.writeValueAsString(expectedResponse))
-                .addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .setBody(mapper.writeValueAsString(expectedResponse)))
 
-        def kakaoApiResult = kakaoAddressSearchService.requestAddressSearch(address)
+        def kakaoApiResult = kakaoAddressSearchService.requestAddressSearch(inputAddress)
+        def takeRequest = mockWebServer.takeRequest()
 
         then:
-        def takeRequest = mockWebServer.takeRequest()
+        2 * kakaoUriBuilderService.buildUriByAddressSearch(inputAddress) >> uri
         takeRequest.getMethod() == "GET"
         kakaoApiResult.getDocumentList().size() == 1
         kakaoApiResult.getMetaDto().totalCount == 1
-        kakaoApiResult.getDocumentList().get(0).getAddressName() == address
+        kakaoApiResult.getDocumentList().get(0).getAddressName() == inputAddress
+
     }
+
 
     def "requestAddressSearch retry fail "() {
         given:
-        def address = "서울 성북구 종암로 10길"
         def uri = mockWebServer.url("/").uri()
 
         when:
-        kakaoUriBuilderService.buildUriByAddressSearch(address) >> uri
-
-        mockWebServer.enqueue(new MockResponse().setResponseCode(429))
-        mockWebServer.enqueue(new MockResponse().setResponseCode(429))
         mockWebServer.enqueue(new MockResponse().setResponseCode(429))
         mockWebServer.enqueue(new MockResponse().setResponseCode(429))
 
-        kakaoAddressSearchService.requestAddressSearch(address)
+        def result = kakaoAddressSearchService.requestAddressSearch(inputAddress)
 
         then:
-        def e = thrown(Exceptions.RetryExhaustedException.class)
+        2 * kakaoUriBuilderService.buildUriByAddressSearch(inputAddress) >> uri
+        result == null
     }
 }
