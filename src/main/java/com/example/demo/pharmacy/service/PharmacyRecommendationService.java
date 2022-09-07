@@ -41,6 +41,7 @@ public class PharmacyRecommendationService {
         }
 
         List<Direction> directionList = directionService.buildDirectionList(documentDto);
+        //List<Direction> directionList = directionService.buildDirectionByApiList(documentDto);
 
         return directionService.saveAll(directionList)
                 .stream()

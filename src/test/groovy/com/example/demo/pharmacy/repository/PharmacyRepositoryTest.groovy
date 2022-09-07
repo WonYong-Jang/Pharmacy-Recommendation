@@ -83,7 +83,7 @@ class PharmacyRepositoryTest extends AbstractIntegrationContainerBaseTest {
         entity.getPharmacyAddress() == result.getPharmacyAddress()
     }
 
-    def "PharmacyRepository update"() {
+    def "PharmacyRepository update - dirty checking success"() {
 
         given:
         String address = "서울 특별시 성북구 종암동"
@@ -95,13 +95,33 @@ class PharmacyRepositoryTest extends AbstractIntegrationContainerBaseTest {
                 .pharmacyName(name)
                 .build()
         when:
-        def entity = pharmacyRepository.save(pharmacy)
+        def entity = pharmacyRepository.save(pharmacy) // 영속 상태
         pharmacyRepositoryService.updateAddress(entity.getId(), modifiedAddress)
 
         def result = pharmacyRepository.findAll()
 
         then:
         result.get(0).getPharmacyAddress() == modifiedAddress
+    }
+
+    def "PharmacyRepository update - dirty checking fail"() {
+
+        given:
+        String address = "서울 특별시 성북구 종암동"
+        String modifiedAddress = "서울 광진구 구의동"
+        String name = "은혜 약국"
+
+        def pharmacy = Pharmacy.builder() // 비 영속 상태
+                .pharmacyAddress(address)
+                .pharmacyName(name)
+                .build()
+        when:
+        pharmacy.changePharmacyAddress(modifiedAddress)
+
+        def result = pharmacyRepository.findAll()
+
+        then:
+        result.size() == 0
     }
 
     def "BaseTimeEntity_등록"() {
