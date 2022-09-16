@@ -19,6 +19,29 @@ public class PharmacyRepositoryService {
 
     private final PharmacyRepository pharmacyRepository;
 
+    // self invocation test
+    public void startSelfInvocation(List<Pharmacy> pharmacyList) {
+        saveSelfInvocation(pharmacyList);
+    }
+
+    // self invocation test
+    @Transactional
+    public void saveSelfInvocation(List<Pharmacy> pharmacyList) {
+        pharmacyList.forEach(pharmacy -> {
+           pharmacyRepository.save(pharmacy);
+           throw new RuntimeException("error");
+        });
+    }
+
+
+    // read only test
+    @Transactional
+    public void startReadOnlyMethod(Long id) {
+        pharmacyRepository.findById(id).ifPresent(pharmacy -> {
+            pharmacy.changePharmacyAddress("서울 특별시 광진구");
+        });
+    }
+
     @Transactional
     public List<Pharmacy> saveAll(List<Pharmacy> pharmacyList) {
         if(CollectionUtils.isEmpty(pharmacyList)) return Collections.emptyList();
