@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
@@ -20,13 +21,14 @@ public class PharmacyRepositoryService {
     private final PharmacyRepository pharmacyRepository;
 
     // self invocation test
-    public void startSelfInvocation(List<Pharmacy> pharmacyList) {
-        saveSelfInvocation(pharmacyList);
+    public void bar(List<Pharmacy> pharmacyList) {
+        log.info("CurrentTransactionName: "+ TransactionSynchronizationManager.getCurrentTransactionName());
+        foo(pharmacyList);
     }
 
     // self invocation test
     @Transactional
-    public void saveSelfInvocation(List<Pharmacy> pharmacyList) {
+    public void foo(List<Pharmacy> pharmacyList) {
         pharmacyList.forEach(pharmacy -> {
            pharmacyRepository.save(pharmacy);
            throw new RuntimeException("error");
@@ -35,12 +37,12 @@ public class PharmacyRepositoryService {
 
 
     // read only test
-    @Transactional
+    @Transactional(readOnly = true)
     public void startReadOnlyMethod(Long id) {
-        pharmacyRepository.findById(id).ifPresent(pharmacy -> {
-            pharmacy.changePharmacyAddress("서울 특별시 광진구");
-        });
+        pharmacyRepository.findById(id).ifPresent(pharmacy ->
+                pharmacy.changePharmacyAddress("서울 특별시 광진구"));
     }
+
 
     @Transactional
     public List<Pharmacy> saveAll(List<Pharmacy> pharmacyList) {

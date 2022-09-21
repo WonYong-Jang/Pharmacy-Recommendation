@@ -33,7 +33,7 @@ class PharmacyRepositoryServiceTest extends AbstractIntegrationContainerBaseTest
                 .build()
 
         when:
-        pharmacyRepositoryService.startSelfInvocation(Arrays.asList(pharmacy))
+        pharmacyRepositoryService.bar(Arrays.asList(pharmacy))
 
         then:
         def e = thrown(RuntimeException.class)
@@ -41,7 +41,7 @@ class PharmacyRepositoryServiceTest extends AbstractIntegrationContainerBaseTest
         result.size() == 1 // 트랜잭션이 적용되지 않는다( 롤백 적용 X )
     }
 
-    def "transactional test"() {
+    def "transactional readOnly test"() {
 
         given:
         String inputAddress = "서울 특별시 성북구"
@@ -63,6 +63,6 @@ class PharmacyRepositoryServiceTest extends AbstractIntegrationContainerBaseTest
 
         then:
         def result = pharmacyRepositoryService.findAll()
-        result.get(0).getPharmacyAddress() == modifiedAddress
+        result.get(0).getPharmacyAddress() == inputAddress
     }
 }
