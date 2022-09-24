@@ -7,9 +7,9 @@ import com.example.demo.pharmacy.service.PharmacyRepositoryService;
 import com.example.demo.util.CsvUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,10 +21,13 @@ public class PharmacyController {
     private final PharmacyRepositoryService pharmacyRepositoryService;
     private final PharmacyRedisTemplateService pharmacyRedisTemplateService;
 
-    @PostConstruct
-    public void init() {
+    // 데이터 초기 셋팅을 위한 임시 메소드
+    @GetMapping("/csv/save")
+    public String saveCsv() {
         saveCsvToDatabase();
         saveCsvToRedis();
+
+        return "success save";
     }
 
     public void saveCsvToDatabase() {
