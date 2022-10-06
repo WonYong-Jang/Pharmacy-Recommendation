@@ -1,6 +1,8 @@
 package com.example.demo.pharmacy.cache;
 
 import com.example.demo.pharmacy.dto.PharmacyDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
@@ -18,11 +20,14 @@ public class PharmacyRedisTemplateService {
 
     private static final String CACHE_KEY = "PHARMACY";
 
-    private final HashOperations<String, Long, PharmacyDto> hashOperations;
+    private final HashOperations<String, String, String> hashOperations;
+
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public PharmacyRedisTemplateService(RedisTemplate<String, Object> redisTemplate) {
+    public PharmacyRedisTemplateService(RedisTemplate<String, Object> redisTemplate, ObjectMapper objectMapper) {
         this.hashOperations = redisTemplate.opsForHash();
+        this.objectMapper = objectMapper;
     }
 
     public void save(PharmacyDto pharmacyDto) {
@@ -32,18 +37,38 @@ public class PharmacyRedisTemplateService {
         }
 
         try {
-            hashOperations.put(CACHE_KEY, pharmacyDto.getId(), pharmacyDto);
+            hashOperations.put(CACHE_KEY, pharmacyDto.getId().toString(),
+                    objectMapper.writeValueAsString(pharmacyDto));
+            log.info("[PharmacyRedisTemplateService save success] id: {}", pharmacyDto.getId());
         } catch (Exception e) {
-            log.error("[PharmacyRedisTemplateService save error] ", e);
+            log.error("[PharmacyRedisTemplateService save error] {}", e.getMessage());
         }
     }
 
     public List<PharmacyDto> findAll() {
+
         try {
-            return new ArrayList<>(hashOperations.entries(CACHE_KEY).values());
+            List<PharmacyDto> list = new ArrayList<>();
+            for (String value : hashOperations.entries(CACHE_KEY).values()) {
+                PharmacyDto pharmacyDto = deserializePharmacyDto(value);
+                list.add(pharmacyDto);
+            }
+            return list;
+
         } catch (Exception e) {
-            log.error("[PharmacyRedisTemplateService findAll error] ", e);
+            log.error("[PharmacyRedisTemplateService findAll error]: {}", e.getMessage());
             return Collections.emptyList();
+        }
+
+    }
+
+    private PharmacyDto deserializePharmacyDto(String value) throws JsonProcessingException {
+
+        try {
+            return objectMapper.readValue(value, PharmacyDto.class);
+        } catch (JsonProcessingException e) {
+            log.error("[PharmacyRedisTemplateService deserializePharmacyDto error]: {}", e.getMessage());
+            throw e;
         }
     }
 }
