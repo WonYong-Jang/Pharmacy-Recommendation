@@ -24,4 +24,17 @@ class KakaoUriBuilderServiceTest extends Specification {
         then:
         decodedResult == "https://dapi.kakao.com/v2/local/search/address.json?query=서울 성북구"
     }
+
+    def "buildUriByAddressSearch - parameter is null"() {
+        given:
+        def address = null
+        def charset = StandardCharsets.UTF_8
+
+        when:
+        def uri = kakaoUriBuilderService.buildUriByAddressSearch(address)
+        def decodedResult = URLDecoder.decode(uri.toString(), charset)
+
+        then:
+        decodedResult == "https://dapi.kakao.com/v2/local/search/address.json?query"
+    }
 }
