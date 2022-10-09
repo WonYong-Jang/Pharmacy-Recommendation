@@ -16,7 +16,7 @@ public class KakaoUriBuilderService {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(KAKAO_LOCAL_SEARCH_ADDRESS_URL);
         uriBuilder.queryParam("query", address);
 
-        URI uri = uriBuilder.build().encode().toUri();
+        URI uri = uriBuilder.build().encode().toUri(); // encode default utf-8
         log.info("[KakaoAddressSearchService requestAddressSearch] address: {}, uri: {}", address, uri);
 
         return uri;

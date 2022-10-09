@@ -43,7 +43,6 @@ public class KakaoCategorySearchService {
         headers.set(HttpHeaders.AUTHORIZATION, "KakaoAK "+ kakaoRestApiKey);
         HttpEntity<?> httpEntity = new HttpEntity<>(headers);
 
-
         return restTemplate.exchange(uri, HttpMethod.GET, httpEntity, KakaoApiResponseDto.class).getBody();
     }
 }
