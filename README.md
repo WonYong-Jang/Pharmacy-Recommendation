@@ -1,7 +1,7 @@
 # Pharmacy-Recommendation   
 
 해당 코드는 [패스트 캠퍼스 강의](https://fastcampus.co.kr/dev_online_befinal)에서 사용된다.   
-강의 각 챕터별 완성 코드는 [링크](https://github.com/WonYong-Jang/Pharmacy-Recommendation-Version-Management)에서 
+강의 각 챕터 별 완성 코드는 [링크](https://github.com/WonYong-Jang/Pharmacy-Recommendation-Version-Management)에서 
 commit으로 기록 된다.    
  
 [외부 API(카카오 주소 검색 API](https://developers.kakao.com/docs/latest/ko/local/dev-guide))와 [공공 데이터(약국 현황 정보)](https://www.data.go.kr/data/15065023/fileData.do)를 활용함으로써 
@@ -84,6 +84,6 @@ commit으로 기록 된다.
 
 ## Result   
 
-<img width="1300" alt="스크린샷 2022-06-23 오후 8 04 48" src="https://user-images.githubusercontent.com/26623547/175286356-deefcf5d-f94e-49c3-b0f0-4f2c2e3ed50a.png">
+<img width="1300" alt="스크린샷 2022-06-23 오후 8 04 48" src="https://user-images.githubusercontent.com/26623547/175286356-deefcf5d-f94e-49c3-b0f0-4f2c2e3ed50a.png">   
 
-<img width="1300" alt="스크린샷 2022-07-04 오후 11 35 48" src="https://user-images.githubusercontent.com/26623547/177176044-ec4d7809-94d1-4fe8-9837-16a9c8c0cd7a.png">
+<img width="1300" alt="스크린샷 2022-10-13 오후 10 30 04" src="https://user-images.githubusercontent.com/26623547/195610945-7bf03544-e8aa-44b9-ad54-090948c8d1ea.png">   
