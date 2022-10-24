@@ -33,7 +33,7 @@ spring:
     port: 6379
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     show-sql: true
 
 pharmacy:
@@ -56,7 +56,7 @@ spring:
     port: 6379
   jpa:
     hibernate:
-      ddl-auto: create # prod 배포시 validate
+      ddl-auto: validate # prod 배포시 validate
     show-sql: true
 
 pharmacy:
