@@ -5,13 +5,11 @@ import com.example.demo.api.service.KakaoCategorySearchService
 import com.example.demo.direction.repository.DirectionRepository
 import com.example.demo.pharmacy.dto.PharmacyDto
 import com.example.demo.pharmacy.service.PharmacySearchService
+import com.google.common.collect.Lists
 import spock.lang.Specification
 import spock.lang.Subject
 
 class DirectionServiceTest extends Specification {
-
-    @Subject
-    private DirectionService directionService
 
     private PharmacySearchService pharmacySearchService = Mock()
     private DirectionRepository directionRepository = Mock()
@@ -19,14 +17,16 @@ class DirectionServiceTest extends Specification {
 
     private KakaoCategorySearchService kakaoCategorySearchService = Mock()
 
+    @Subject
+    private DirectionService directionService = new DirectionService(
+            pharmacySearchService, directionRepository,
+            base62Service, kakaoCategorySearchService)
+
     private List<PharmacyDto> pharmacyList
 
     def setup() {
-        directionService = new DirectionService(
-                pharmacySearchService, directionRepository,
-                base62Service, kakaoCategorySearchService)
 
-        pharmacyList = com.google.common.collect.Lists.newArrayList(
+        pharmacyList = Lists.newArrayList(
                 PharmacyDto.builder()
                         .id(1L)
                         .pharmacyName("돌곶이온누리약국")
@@ -60,7 +60,7 @@ class DirectionServiceTest extends Specification {
         String.format("%.1f", distance) == result
     }
 
-    def "buildDirectionList 입력 위, 경도 기준으로 거리순 정렬이 되는지 확인"() {
+    def "buildDirectionList - 결과 값이 거리순 정렬이 되는지 확인"() {
         given:
         def addressName = "서울 성북구 종암로10길"
         double inputLatitude = 37.5960650456809
@@ -85,7 +85,7 @@ class DirectionServiceTest extends Specification {
         String.format("%.1f", results.get(1).distance) == "2.4"
     }
 
-    def "searchPharmacyList 정해진 반경 10km 내에 검색이 되는지 확인"() {
+    def "buildDirectionList -  정해진 반경 10km 내에 검색이 되는지 확인"() {
         given:
         pharmacyList.add(
                 PharmacyDto.builder()
