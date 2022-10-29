@@ -1,6 +1,7 @@
-package com.example.demo.direction.service
+package com.example.demo.pharmacy.service
 
 import com.example.demo.AbstractIntegrationContainerBaseTest
+import com.example.demo.pharmacy.service.AddressConverterService
 import org.springframework.beans.factory.annotation.Autowired
 
 class AddressConverterServiceIntegrationTest extends AbstractIntegrationContainerBaseTest {

@@ -1,4 +1,4 @@
-package com.example.demo.direction.service;
+package com.example.demo.pharmacy.service;
 
 import com.example.demo.api.dto.DocumentDto;
 import com.example.demo.api.dto.KakaoApiResponseDto;
