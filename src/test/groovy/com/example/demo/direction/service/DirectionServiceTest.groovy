@@ -5,7 +5,6 @@ import com.example.demo.api.service.KakaoCategorySearchService
 import com.example.demo.direction.repository.DirectionRepository
 import com.example.demo.pharmacy.dto.PharmacyDto
 import com.example.demo.pharmacy.service.PharmacySearchService
-import com.google.common.collect.Lists
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -26,7 +25,8 @@ class DirectionServiceTest extends Specification {
 
     def setup() {
 
-        pharmacyList = Lists.newArrayList(
+        pharmacyList = new ArrayList<>()
+        pharmacyList.addAll(
                 PharmacyDto.builder()
                         .id(1L)
                         .pharmacyName("돌곶이온누리약국")
