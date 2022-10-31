@@ -46,7 +46,7 @@ class KakaoAddressSearchServiceRetryTest extends AbstractIntegrationContainerBas
         def uri = mockWebServer.url("/").uri()
 
         when:
-        mockWebServer.enqueue(new MockResponse().setResponseCode(429))
+        mockWebServer.enqueue(new MockResponse().setResponseCode(504))
         mockWebServer.enqueue(new MockResponse().setResponseCode(200)
                 .addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .setBody(mapper.writeValueAsString(expectedResponse)))
@@ -69,8 +69,8 @@ class KakaoAddressSearchServiceRetryTest extends AbstractIntegrationContainerBas
         def uri = mockWebServer.url("/").uri()
 
         when:
-        mockWebServer.enqueue(new MockResponse().setResponseCode(429))
-        mockWebServer.enqueue(new MockResponse().setResponseCode(429))
+        mockWebServer.enqueue(new MockResponse().setResponseCode(504))
+        mockWebServer.enqueue(new MockResponse().setResponseCode(504))
 
         def result = kakaoAddressSearchService.requestAddressSearch(inputAddress)
 
