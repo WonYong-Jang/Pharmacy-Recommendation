@@ -1,6 +1,8 @@
 package com.example.demo.pharmacy.service;
 
 import com.example.demo.api.dto.DocumentDto;
+import com.example.demo.api.dto.KakaoApiResponseDto;
+import com.example.demo.api.service.KakaoAddressSearchService;
 import com.example.demo.direction.dto.OutputDto;
 import com.example.demo.direction.entity.Direction;
 import com.example.demo.direction.service.Base62Service;
@@ -9,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +25,7 @@ public class PharmacyRecommendationService {
 
     private static final String ROAD_VIEW_BASE_URL = "https://map.kakao.com/link/roadview/";
 
-    private final AddressConverterService addressConverterService;
+    private final KakaoAddressSearchService kakaoAddressSearchService;
     private final DirectionService directionService;
     private final Base62Service base62Service;
 
@@ -31,13 +34,14 @@ public class PharmacyRecommendationService {
 
     public List<OutputDto> recommendPharmacyList(String address) {
 
-        DocumentDto documentDto = addressConverterService.convertAddressToGeospatialData(address)
-                .orElse(null);
+        KakaoApiResponseDto kakaoApiResponseDto = kakaoAddressSearchService.requestAddressSearch(address);
 
-        if (Objects.isNull(documentDto)) {
+        if (Objects.isNull(kakaoApiResponseDto) || CollectionUtils.isEmpty(kakaoApiResponseDto.getDocumentList())) {
             log.error("[PharmacyRecommendationService.recommendPharmacyList fail] Input address: {}", address);
             return Collections.emptyList();
         }
+
+        DocumentDto documentDto = kakaoApiResponseDto.getDocumentList().get(0);
 
         List<Direction> directionList = directionService.buildDirectionList(documentDto);
         //List<Direction> directionList = directionService.buildDirectionByApiList(documentDto);
