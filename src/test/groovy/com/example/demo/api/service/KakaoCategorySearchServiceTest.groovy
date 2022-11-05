@@ -17,7 +17,7 @@ class KakaoCategorySearchServiceTest extends AbstractIntegrationContainerBaseTes
         double radius = 10.0 // km
 
         when:
-        def result = kakaoCategorySearchService.requestCategorySearch(y, x, radius)
+        def result = kakaoCategorySearchService.requestPharmacyCategorySearch(y, x, radius)
 
         def inputList = result.getDocumentList().stream()
                 .map(t -> t.getDistance())

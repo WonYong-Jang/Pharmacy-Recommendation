@@ -9,7 +9,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
@@ -18,26 +17,18 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class KakaoCategorySearchService {
 
+    private final KakaoUriBuilderService kakaoUriBuilderService;
+
     private final RestTemplate restTemplate;
+
+    private static final String PHARMACY_CATEGORY = "PM9";
 
     @Value("${kakao.rest.api.key}")
     private String kakaoRestApiKey;
 
-    private static final String KAKAO_LOCAL_CATEGORY_SEARCH_URL = "https://dapi.kakao.com/v2/local/search/category.json";
+    public KakaoApiResponseDto requestPharmacyCategorySearch(double latitude, double longitude, double radius) {
 
-    public KakaoApiResponseDto requestCategorySearch(double latitude, double longitude, double radius) {
-
-        double meterRadius = radius * 1000;
-
-        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(KAKAO_LOCAL_CATEGORY_SEARCH_URL);
-        uriBuilder.queryParam("category_group_code","PM9");
-        uriBuilder.queryParam("x", longitude);
-        uriBuilder.queryParam("y", latitude);
-        uriBuilder.queryParam("radius", meterRadius);
-        uriBuilder.queryParam("sort","distance");
-
-        URI uri = uriBuilder.build().encode().toUri();
-        log.info("[KakaoCategorySearchService requestCategorySearch] uri: {}", uri);
+        URI uri = kakaoUriBuilderService.buildUriByCategorySearch(latitude, longitude, radius, PHARMACY_CATEGORY);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, "KakaoAK "+ kakaoRestApiKey);

@@ -43,8 +43,6 @@ public class KakaoAddressSearchService {
         headers.set(HttpHeaders.AUTHORIZATION, "KakaoAK " + kakaoRestApiKey);
         HttpEntity httpEntity = new HttpEntity<>(headers);
 
-        log.info("[KakaoAddressSearchService requestAddressSearch] address: {}", address);
-
         return restTemplate.exchange(uri, HttpMethod.GET, httpEntity, KakaoApiResponseDto.class).getBody();
     }
 

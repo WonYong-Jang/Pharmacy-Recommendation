@@ -68,11 +68,11 @@ public class DirectionService {
     }
 
     // pharmacy search by category kakao api
-    public List<Direction> buildDirectionByApiList(DocumentDto inputDocumentDto) {
+    public List<Direction> buildDirectionListByCategoryApi(DocumentDto inputDocumentDto) {
         if(Objects.isNull(inputDocumentDto)) return Collections.emptyList();
 
         return kakaoCategorySearchService
-                .requestCategorySearch(inputDocumentDto.getLatitude(), inputDocumentDto.getLongitude(), RADIUS_KM)
+                .requestPharmacyCategorySearch(inputDocumentDto.getLatitude(), inputDocumentDto.getLongitude(), RADIUS_KM)
                 .getDocumentList()
                 .stream().map(resultDocumentDto ->
                         Direction.builder()
@@ -83,7 +83,7 @@ public class DirectionService {
                                 .targetAddress(resultDocumentDto.getAddressName())
                                 .targetLatitude(resultDocumentDto.getLatitude())
                                 .targetLongitude(resultDocumentDto.getLongitude())
-                                .distance(resultDocumentDto.getDistance() * 0.001)
+                                .distance(resultDocumentDto.getDistance() * 0.001) // km 단위
                                 .build())
                 .limit(MAX_SEARCH_COUNT)
                 .collect(Collectors.toList());
