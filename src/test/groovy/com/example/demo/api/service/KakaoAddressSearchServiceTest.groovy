@@ -36,26 +36,25 @@ class KakaoAddressSearchServiceTest extends AbstractIntegrationContainerBaseTest
     def "정상적인 주소를 입력했을 경우, 정상적으로 위도 경도로 변환 된다."() {
 
         given:
-        Boolean actualResult = false
+        boolean actualResult = false
 
         when:
-        def searchResult = kakaoAddressSearchService.requestAddressSearch(address)
+        def searchResult = kakaoAddressSearchService.requestAddressSearch(inputAddress)
 
         then:
-        if(searchResult == null) actualResult = null
-        if(searchResult != null)
-            actualResult = searchResult.getDocumentList().size() > 0
+        if(searchResult == null) actualResult = false
+        else actualResult = searchResult.getDocumentList().size() > 0
 
         actualResult == expectedResult
 
         where:
-        address                                 | expectedResult
+        inputAddress                            | expectedResult
         "서울 특별시 성북구 종암동"                   | true
         "서울 성북구 종암동 91"                     | true
         "서울 대학로"                             | true
         "서울 성북구 종암동 잘못된 주소"               | false
         "광진구 구의동 251-45"                     | true
         "광진구 구의동 251-455555"                 | false
-        ""                                      | null
+        ""                                      | false
     }
 }
