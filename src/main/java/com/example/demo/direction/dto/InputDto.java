@@ -1,9 +1,11 @@
 package com.example.demo.direction.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
-@Getter @Setter
+@Getter
+@AllArgsConstructor
 public class InputDto {
-    String address;
+    private String address;
 }
