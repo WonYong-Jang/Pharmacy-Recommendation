@@ -22,7 +22,7 @@ public class DirectionController {
 
         Direction resultDirection = directionService.findById(encodedId);
 
-        String params = String.join(",", resultDirection.getTargetAddress(),
+        String params = String.join(",", resultDirection.getTargetPharmacyName(),
                 String.valueOf(resultDirection.getTargetLatitude()), String.valueOf(resultDirection.getTargetLongitude()));
         String result = UriComponentsBuilder.fromHttpUrl(KAKAO_DIRECTION_BASE_URL + params)
                 .toUriString();
