@@ -8,7 +8,7 @@ commit으로 기록 된다.
 혼자 개발하고 마무리 되는 프로젝트가 아닌 실제 서비스 가능한 수준의 
 프로젝트를 경험 해본다.   
 
-추천된 약국의 길 안내는 [카카오 길찾기 및 로드뷰 URL](https://apis.map.kakao.com/web/guide/#routeurl)로 
+추천된 약국의 길 안내는 [카카오 지도 및 로드뷰 바로가기 URL](https://apis.map.kakao.com/web/guide/#routeurl)로 
 제공 된다.     
 
 해당 강의를 모두 수강 하게 되면 강의에서 사용 하는 약국 도메인이 아닌 자신 만의 추천 서비스 구현이   
@@ -33,7 +33,7 @@ commit으로 기록 된다.
   - 입력한 주소 정보에서 정해진 반경(10km) 내에 있는 약국만 추천 한다.   
   - 추출한 약국 데이터는 길안내 URL 및 로드뷰 URL로 제공 한다.   
     - ex)    
-    길안내 URL : https://map.kakao.com/link/to/카카오판교오피스,37.402056,127.108212    
+    길안내 URL : https://map.kakao.com/link/map/우리회사,37.402056,127.108212    
     로드뷰 URL : https://map.kakao.com/link/roadview/37.402056,127.108212     
 
   - 길안내 URL은 고객에게 제공 되기 때문에 가독성을 위해 shorten url로 제공 한다.
