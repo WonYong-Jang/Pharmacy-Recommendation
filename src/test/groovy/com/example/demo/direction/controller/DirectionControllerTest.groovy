@@ -1,6 +1,5 @@
 package com.example.demo.direction.controller
 
-import com.example.demo.direction.entity.Direction
 import com.example.demo.direction.service.DirectionService
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultActions
@@ -26,16 +25,10 @@ class DirectionControllerTest extends Specification {
         given:
         String encodedId = "r"
 
-        Direction direction = Direction.builder()
-                .targetPharmacyName("pharmacy")
-                .targetLatitude(38.11)
-                .targetLongitude(128.11)
-                .build()
-
         String redirectURL = "https://map.kakao.com/link/map/pharmacy,38.11,128.11"
 
         when:
-        directionService.findById(encodedId) >> direction
+        directionService.findDirectionUrlById(encodedId) >> redirectURL
         ResultActions result = mockMvc.perform(get("/dir/{encodedId}", encodedId))
 
         then:
