@@ -3,12 +3,13 @@ package com.example.demo.pharmacy.cache;
 import com.example.demo.pharmacy.dto.PharmacyDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,18 +17,19 @@ import java.util.Objects;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class PharmacyRedisTemplateService {
 
     private static final String CACHE_KEY = "PHARMACY";
 
-    private final HashOperations<String, String, String> hashOperations;
-
+    private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
 
-    @Autowired
-    public PharmacyRedisTemplateService(RedisTemplate<String, Object> redisTemplate, ObjectMapper objectMapper) {
+    private HashOperations<String, String, String> hashOperations;
+
+    @PostConstruct
+    public void init() {
         this.hashOperations = redisTemplate.opsForHash();
-        this.objectMapper = objectMapper;
     }
 
     public void save(PharmacyDto pharmacyDto) {
@@ -59,7 +61,6 @@ public class PharmacyRedisTemplateService {
             log.error("[PharmacyRedisTemplateService findAll error]: {}", e.getMessage());
             return Collections.emptyList();
         }
-
     }
 
     private PharmacyDto deserializePharmacyDto(String value) throws JsonProcessingException {

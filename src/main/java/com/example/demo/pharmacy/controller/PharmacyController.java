@@ -24,7 +24,7 @@ public class PharmacyController {
     // 데이터 초기 셋팅을 위한 임시 메소드
     @GetMapping("/csv/save")
     public String saveCsv() {
-        saveCsvToDatabase();
+        //saveCsvToDatabase();
         saveCsvToRedis();
 
         return "success save";
