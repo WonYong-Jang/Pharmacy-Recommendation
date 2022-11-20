@@ -10,7 +10,7 @@ import org.springframework.data.redis.core.ValueOperations
 class RedisTemplateTest extends AbstractIntegrationContainerBaseTest {
 
     @Autowired
-    RedisTemplate redisTemplate
+    private RedisTemplate redisTemplate
 
     def "RedisTemplate String operations"() {
 

@@ -39,8 +39,9 @@ public class PharmacyRedisTemplateService {
         }
 
         try {
-            hashOperations.put(CACHE_KEY, pharmacyDto.getId().toString(),
-                    objectMapper.writeValueAsString(pharmacyDto));
+            hashOperations.put(CACHE_KEY,
+                    pharmacyDto.getId().toString(),
+                    serializePharmacyDto(pharmacyDto));
             log.info("[PharmacyRedisTemplateService save success] id: {}", pharmacyDto.getId());
         } catch (Exception e) {
             log.error("[PharmacyRedisTemplateService save error] {}", e.getMessage());
@@ -63,13 +64,16 @@ public class PharmacyRedisTemplateService {
         }
     }
 
-    private PharmacyDto deserializePharmacyDto(String value) throws JsonProcessingException {
+    public void delete(Long id) {
+        hashOperations.delete(CACHE_KEY, String.valueOf(id));
+        log.info("[PharmacyRedisTemplateService delete]: {} ", id);
+    }
 
-        try {
-            return objectMapper.readValue(value, PharmacyDto.class);
-        } catch (JsonProcessingException e) {
-            log.error("[PharmacyRedisTemplateService deserializePharmacyDto error]: {}", e.getMessage());
-            throw e;
-        }
+    private String serializePharmacyDto(PharmacyDto pharmacyDto) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(pharmacyDto);
+    }
+
+    private PharmacyDto deserializePharmacyDto(String value) throws JsonProcessingException {
+        return objectMapper.readValue(value, PharmacyDto.class);
     }
 }
