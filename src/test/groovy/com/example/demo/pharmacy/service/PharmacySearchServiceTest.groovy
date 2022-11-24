@@ -1,6 +1,7 @@
 package com.example.demo.pharmacy.service
 
 import com.example.demo.pharmacy.cache.PharmacyRedisTemplateService
+import com.example.demo.pharmacy.dto.PharmacyDto
 import com.example.demo.pharmacy.entity.Pharmacy
 import com.google.common.collect.Lists
 import spock.lang.Specification
@@ -56,5 +57,17 @@ class PharmacySearchServiceTest extends Specification {
         then:
         result.size() == 0
         result.empty
+    }
+
+    def "레디스 장애시 DB를 이용 하여 약국 데이터 조회"() {
+
+        when:
+        pharmacyRedisTemplateService.findAll() >> []
+        pharmacyRepositoryService.findAll() >> pharmacyList
+
+        def result = pharmacySearchService.searchPharmacyDtoList()
+
+        then:
+        result.size() == 2
     }
 }
