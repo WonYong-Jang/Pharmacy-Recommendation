@@ -1,22 +1,5 @@
 # Pharmacy-Recommendation   
-
-해당 코드는 [패스트 캠퍼스 강의](https://fastcampus.co.kr/dev_online_befinal)에서 사용된다.   
-강의 각 챕터 별 완성 코드는 [링크](https://github.com/WonYong-Jang/Pharmacy-Recommendation-Version-Management)에서 
-commit으로 기록 된다.    
  
-[외부 API(카카오 주소 검색 API](https://developers.kakao.com/docs/latest/ko/local/dev-guide))와 [공공 데이터(약국 현황 정보)](https://www.data.go.kr/data/15065023/fileData.do)를 활용함으로써 
-혼자 개발하고 마무리 되는 프로젝트가 아닌 실제 서비스 가능한 수준의 
-프로젝트를 경험 해본다.   
-
-추천된 약국의 길 안내는 [카카오 지도 및 로드뷰 바로가기 URL](https://apis.map.kakao.com/web/guide/#routeurl)로 
-제공 된다.     
-
-해당 강의를 모두 수강 하게 되면 강의에서 사용 하는 약국 도메인이 아닌 자신 만의 추천 서비스 구현이   
-가능해 질 것이며, [카카오 키워드 장소 검색 api](https://developers.kakao.com/docs/latest/ko/local/dev-guide#search-by-category)를 
-이용하여 약국 외에 편의점, 지하철역, 음식점 등 다른 도메인으로 적용 가능함을 확인할 수 있다.    
-
-즉, 다른 도메인의 데이터 또는 api가 존재한다면 자신만의 추천 서비스를 구현 해볼 수 있다.
-
 ## 요구사항 분석 
 
 - 약국 찾기 서비스 요구사항
